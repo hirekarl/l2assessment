@@ -22,8 +22,8 @@ function HistoryPage() {
     }
   }
 
-  const sortedHistory = [...history].sort((a, b) => 
-    a.message.localeCompare(b.message)
+  const sortedHistory = [...history].sort((a, b) =>
+    new Date(b.timestamp) - new Date(a.timestamp)
   )
   
   const filteredHistory = filter === 'all' 
@@ -116,7 +116,7 @@ function HistoryPage() {
                     <div className="text-gray-800 font-medium mb-2">
                       "{item.message.substring(0, 100)}{item.message.length > 100 ? '...' : ''}"
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 flex-wrap gap-y-1">
                       <span className="text-xs bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-semibold">
                         {item.category}
                       </span>
@@ -127,6 +127,11 @@ function HistoryPage() {
                       }`}>
                         {item.urgency} Urgency
                       </span>
+                      {item.escalate && (
+                        <span className="text-xs bg-red-600 text-white px-3 py-1 rounded-full font-semibold">
+                          Escalate
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className="text-gray-400 ml-4">
