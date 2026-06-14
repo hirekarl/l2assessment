@@ -2,120 +2,104 @@
 
 ## Overview
 
-The Customer Inbox Triage app is a lightweight AI-powered tool that helps classify customer support messages and recommend actions. It uses Groq AI to categorize messages, applies rule-based urgency scoring, and suggests next steps based on predefined templates.
-
-## Problem Statement
-
-Support teams waste time manually reading and triaging customer messages. This tool provides an automated first pass at classification to help prioritize and route messages more efficiently.
+An AI-powered triage tool that classifies incoming customer support messages, assesses urgency, and recommends a routing action — all in a single LLM call. Built for Relay AI, a SaaS customer operations platform.
 
 ## Tech Stack
 
 - **Frontend**: React + Vite + Tailwind CSS
-- **AI**: Groq API (Llama 3.3 70B - Free tier)
+- **AI**: Groq API (Llama 3.3 70B)
 - **Runtime**: Browser-based (local development only)
 
-## Setup Instructions
+## Setup
 
 ### Prerequisites
 
-- Node.js (v16 or higher)
+- Node.js v16+
 - npm or yarn
-- Groq API key (FREE - get from https://console.groq.com)
+- A free Groq API key from [console.groq.com](https://console.groq.com)
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd "L2 assessment"
-   ```
+```bash
+git clone https://github.com/hirekarl/l2assessment.git
+cd l2assessment
+npm install
+```
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+Create `.env.local` in the project root:
 
-3. **Configure Groq API Key**
-   
-   Create a `.env.local` file in the root directory:
-   ```bash
-   cp .env.example .env.local
-   ```
-   
-   Edit `.env.local` and add your Groq API key:
-   ```
-   VITE_GROQ_API_KEY=gsk_your-actual-key-here
-   ```
-   
-   Get your FREE API key from: https://console.groq.com/keys
-   
-   **Why Groq?** Groq offers a generous free tier with fast inference and no credit card required!
+```
+VITE_GROQ_API_KEY=gsk_your-actual-key-here
+```
 
-4. **Run the application**
-   ```bash
-   npm run dev
-   ```
-   
-   The app will be available at `http://localhost:5173`
+Start the dev server:
+
+```bash
+npm run dev
+```
+
+App runs at `http://localhost:5173`.
 
 ## How It Works
 
-1. **Paste Message**: User pastes a customer support message into the text area
-2. **Analyze**: Click "Analyze Message" to process the input
-3. **Classification**: The app runs three processes in parallel:
-   - **Category Classification** (LLM): Uses Groq AI (Llama 3.3 70B) to categorize the message
-   - **Urgency Scoring** (Rule-based): Applies simple rules to determine urgency
-   - **Recommendation** (Template-based): Maps category to a recommended action
-4. **Display Results**: Shows category, urgency tag, recommended action, and AI reasoning
-5. **History**: All analyses are saved to localStorage and viewable in the History tab
+A customer message is submitted and analyzed in two steps:
 
+1. **LLM classification** — A structured prompt asks the Llama 3.3 70B model to return a JSON object with `category`, `urgency`, and `reasoning`. Temperature is set to 0.2 for consistent output.
+2. **Template routing** — The category and urgency are mapped to a recommended action. High-urgency messages get escalation-specific instructions; the UI surfaces an escalation banner for immediate visibility.
 
-## Example Test Messages
+Results are saved to `localStorage` and viewable in the History tab, sorted newest-first.
 
-Try analyzing these messages to see how the triage system works:
+### Categories
 
-### Example 1: Production Issue
-```
-Our production server is down
-```
+| Category | Description |
+|---|---|
+| Billing Issue | Payments, charges, invoices, refunds, cancellations |
+| Technical Problem | Bugs, errors, outages, slow performance |
+| Feature Request | Suggestions for new or improved functionality |
+| General Inquiry | How-to questions, account info, general feedback |
 
-### Example 2: Customer Feedback
-```
-Hi there! I just wanted to say thank you for your amazing customer service. I've been using your product for three years now and I'm really happy with it. Keep up the great work!
-```
+### Urgency Levels
 
-### Example 3: Feature Request
-```
-I would love to see a dark mode option in the app. It would be much easier on my eyes during night time usage.
-```
+| Level | Signals |
+|---|---|
+| High | Service down, data loss, fraud, words like "ASAP" / "immediately", ALL CAPS frustration |
+| Medium | Genuine issue, not an emergency |
+| Low | Casual question, positive feedback, future suggestion |
 
-### Example 4: Payment Issue
-```
-I tried to update my payment method but the page keeps loading forever. Is this a known issue?
-```
+High-urgency messages trigger an escalation banner and receive urgency-specific routing instructions instead of the standard template.
 
-### Example 5: Billing Question
-```
-Can I upgrade my subscription to the pro plan?
-```
+## Improvements Made (Week 2 Assessment)
 
-### Example 6: Technical Support
-```
-The dashboard won't load when I try to access it. I've tried refreshing but it keeps timing out.
-```
+The original codebase had several bugs that made the triage output unreliable. Below is a summary of what was found and fixed.
+
+### 1. LLM integration was fragile (`llmHelper.js`)
+
+**Before:** No system prompt. The model responded in free text and the app extracted a category by scanning the response for words like "billing" or "technical". Temperature was 0.7, making results inconsistent. Urgency was not assessed by the LLM at all.
+
+**After:** A system prompt defines the four categories, urgency rules, and required JSON output format. The model returns `{ category, urgency, reasoning }` in a single call. Temperature lowered to 0.2. JSON is validated against the allowed value sets before use.
+
+### 2. Urgency scorer had inverted logic (`urgencyScorer.js`)
+
+**Before:** A rule-based heuristic scored messages on a 0–100 scale. ALL CAPS *decreased* urgency by 50 points. Off-hours and weekends also *decreased* urgency. Polite language like "please" deducted 15 points per word. A message like "PLEASE FIX THIS IMMEDIATELY" would score Low.
+
+**After:** Urgency is assessed by the LLM using the context of the full message. The heuristic scorer is no longer used. `urgencyScorer.js` remains in the repo but is not imported.
+
+### 3. Templates had a copy-paste bug and dead logic (`templates.js`)
+
+**Before:** `"Feature Request"` was mapped to `"Ask user to check billing portal."` — an exact copy of the Billing Issue action. `shouldEscalate()` ignored its `category` and `urgency` parameters and returned `true` for any message over 100 characters. `getRecommendedAction()` accepted an `urgency` argument but never used it.
+
+**After:** Each category has a correct, distinct recommended action. High-urgency messages receive escalation-specific overrides. `shouldEscalate()` returns `true` for High urgency, or Medium urgency on a Billing Issue. `getRecommendedAction()` uses urgency to select the right action.
+
+### 4. History sorted alphabetically by message text (`HistoryPage.jsx`)
+
+**Before:** `history.sort((a, b) => a.message.localeCompare(b.message))` — sorted A–Z by message content.
+
+**After:** Sorted newest-first by timestamp: `sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))`.
 
 ## Security Note
 
-⚠️ **Warning**: This application exposes the Groq API key in the browser (using `dangerouslyAllowBrowser: true`). This is acceptable for local development only but should **NEVER** be done in production. In a real application, API calls should be made from a secure backend server.
-
-## Why Groq?
-
-- ✅ **Completely Free** - No credit card required
-- ✅ **Fast Inference** - Groq's LPU technology is incredibly fast
-- ✅ **Generous Limits** - ~14,400 requests/day on free tier
-- ✅ **High Quality** - Llama 3.3 70B performs excellently
-- ✅ **Easy Signup** - Get started in minutes at https://console.groq.com
+This app exposes the Groq API key in the browser via `dangerouslyAllowBrowser: true`. This is acceptable for local development only. In production, API calls must be proxied through a backend server so the key is never shipped to the client.
 
 ## License
 
-This project is for educational purposes only.
+Educational use only.
