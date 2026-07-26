@@ -1,8 +1,6 @@
 # CLAUDE.md
 
-Customer Inbox Triage — React 19 + TypeScript + Vite SPA with a Vercel serverless function
-(`api/categorize.ts`) calling Groq (Llama 3.3 70B) to classify support
-messages. See README.md for the full architecture and feature writeup.
+Customer Inbox Triage — React 19 + TypeScript + Vite SPA with a Vercel serverless function (`api/categorize.ts`) calling Groq (Llama 3.3 70B) to classify support messages. See README.md for the full architecture and feature writeup.
 
 ## Commands
 
@@ -21,19 +19,8 @@ messages. See README.md for the full architecture and feature writeup.
 
 ## Dependency conflicts
 
-When a new devDependency's declared peer range doesn't cover the installed
-tool version (has happened with `eslint-plugin-jsx-a11y` vs. ESLint 10):
-prefer an npm `overrides` peer-pin —
-`"overrides": { "pkg": { "peerDep": "$peerDep" } }` — over `--legacy-peer-deps`
-or `--force`. The latter silently breaks `npm ci` in CI (which has no
-override flags), since it re-resolves from the lockfile under strict peer
-rules. After any `overrides` change: `rm -rf node_modules && npm ci` (not
-just `npm install`) to confirm CI's exact install path still succeeds, and
-`npm audit` to confirm zero vulnerabilities.
+When a new devDependency's declared peer range doesn't cover the installed tool version (has happened with `eslint-plugin-jsx-a11y` vs. ESLint 10): prefer an npm `overrides` peer-pin — `"overrides": { "pkg": { "peerDep": "$peerDep" } }` — over `--legacy-peer-deps` or `--force`. The latter silently breaks `npm ci` in CI (which has no override flags), since it re-resolves from the lockfile under strict peer rules. After any `overrides` change: `rm -rf node_modules && npm ci` (not just `npm install`) to confirm CI's exact install path still succeeds, and `npm audit` to confirm zero vulnerabilities.
 
 ## Deployment
 
-Vercel, via git integration on push to `main` (no deploy step in
-`.github/workflows/ci.yml`). `GROQ_API_KEY` lives in Vercel's server-only env
-vars — CI never exercises the real Groq call path (tests use the mock
-fallback), so a bad key there won't be caught by CI.
+Vercel, via git integration on push to `main` (no deploy step in `.github/workflows/ci.yml`). `GROQ_API_KEY` lives in Vercel's server-only env vars — CI never exercises the real Groq call path (tests use the mock fallback), so a bad key there won't be caught by CI.

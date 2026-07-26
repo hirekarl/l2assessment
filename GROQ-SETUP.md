@@ -46,8 +46,7 @@ GROQ_API_KEY=gsk_your-actual-key-here
 npm run dev:full
 ```
 
-(`npm run dev` alone only starts the Vite frontend — the AI categorization
-endpoint requires `vercel dev`, which also serves `api/categorize.js` locally.)
+(`npm run dev` alone only starts the Vite frontend — the AI categorization endpoint requires `vercel dev`, which also serves `api/categorize.js` locally.)
 
 ### 4. Test It Out
 

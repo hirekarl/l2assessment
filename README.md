@@ -1,14 +1,8 @@
 # Customer Inbox Triage App
 
-[![CI](https://github.com/hirekarl/l2assessment/actions/workflows/ci.yml/badge.svg)](https://github.com/hirekarl/l2assessment/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/hirekarl/l2assessment/graph/badge.svg)](https://codecov.io/gh/hirekarl/l2assessment)
-[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
-![Node](https://img.shields.io/badge/node-%5E20.19%20%7C%7C%20%3E%3D22.12-brightgreen)
+[![CI](https://github.com/hirekarl/l2assessment/actions/workflows/ci.yml/badge.svg)](https://github.com/hirekarl/l2assessment/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/hirekarl/l2assessment/graph/badge.svg)](https://codecov.io/gh/hirekarl/l2assessment) [![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE) ![Node](https://img.shields.io/badge/node-%5E20.19%20%7C%7C%20%3E%3D22.12-brightgreen)
 
-Maintained by [Karl Johnson](https://github.com/hirekarl). See
-[CONTRIBUTING.md](CONTRIBUTING.md) for the dev workflow,
-[SECURITY.md](SECURITY.md) to report a vulnerability, and
-[CHANGELOG.md](CHANGELOG.md) for release history.
+Maintained by [Karl Johnson](https://github.com/hirekarl). See [CONTRIBUTING.md](CONTRIBUTING.md) for the dev workflow, [SECURITY.md](SECURITY.md) to report a vulnerability, and [CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Overview
 
@@ -54,8 +48,7 @@ Run the full stack (frontend + the `/api/categorize` serverless function):
 npm run dev:full
 ```
 
-App runs at `http://localhost:3000`. (`npm run dev` alone starts only the Vite
-frontend — the AI endpoint needs `vercel dev`, which `dev:full` runs.)
+App runs at `http://localhost:3000`. (`npm run dev` alone starts only the Vite frontend — the AI endpoint needs `vercel dev`, which `dev:full` runs.)
 
 ### Scripts
 
