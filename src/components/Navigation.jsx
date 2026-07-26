@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router'
 import { useTheme } from '../contexts/useTheme.js'
 
 /** Top nav bar: brand mark, route links with active-state styling, and the theme toggle. */
