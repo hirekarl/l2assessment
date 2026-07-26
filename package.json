@@ -41,6 +41,9 @@
     "react-markdown": "^10.1.0",
     "react-router-dom": "^7.13.0"
   },
+  "overrides": {
+    "js-yaml": "^5.2.2"
+  },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
     "@eslint/js": "^10.0.1",
