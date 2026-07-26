@@ -2,10 +2,13 @@
 
 [![CI](https://github.com/hirekarl/l2assessment/actions/workflows/ci.yml/badge.svg)](https://github.com/hirekarl/l2assessment/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/hirekarl/l2assessment/graph/badge.svg)](https://codecov.io/gh/hirekarl/l2assessment)
-[![License: CC BY-NC 4.0](https://img.shields.io/badge/license-CC%20BY--NC%204.0-lightgrey)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 ![Node](https://img.shields.io/badge/node-%5E20.19%20%7C%7C%20%3E%3D22.12-brightgreen)
 
-Maintained by [Karl Johnson](https://github.com/hirekarl).
+Maintained by [Karl Johnson](https://github.com/hirekarl). See
+[CONTRIBUTING.md](CONTRIBUTING.md) for the dev workflow,
+[SECURITY.md](SECURITY.md) to report a vulnerability, and
+[CHANGELOG.md](CHANGELOG.md) for release history.
 
 ## Overview
 
@@ -184,6 +187,8 @@ A pass through the open Dependabot backlog, prompted by five open PRs (four GitH
 
 Groq calls are made server-side, from a Vercel serverless function (`api/categorize.js`). `GROQ_API_KEY` is read from the server environment only and is never bundled into the browser build — the frontend calls `/api/categorize` and never sees the key.
 
+To report a vulnerability, see [SECURITY.md](SECURITY.md).
+
 ## License
 
-[CC BY-NC 4.0](LICENSE) — educational/non-commercial use, with attribution.
+[MIT](LICENSE)
