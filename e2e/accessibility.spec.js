@@ -14,7 +14,9 @@ test.describe('Accessibility', () => {
 
   test('Analyze results view has no detectable axe violations', async ({ page }) => {
     await page.goto('/analyze')
-    await page.getByPlaceholder('Paste customer message here...').fill('The app crashed again, this is urgent')
+    await page
+      .getByPlaceholder('Paste customer message here...')
+      .fill('The app crashed again, this is urgent')
     await page.getByRole('button', { name: 'Analyze Message' }).click()
     await expect(page.getByText('Analysis Results')).toBeVisible()
 

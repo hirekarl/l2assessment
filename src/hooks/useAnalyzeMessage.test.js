@@ -4,7 +4,7 @@ import { useAnalyzeMessage } from './useAnalyzeMessage.js'
 import { categorizeMessage } from '../utils/llmHelper.js'
 
 vi.mock('../utils/llmHelper.js', () => ({
-  categorizeMessage: vi.fn()
+  categorizeMessage: vi.fn(),
 }))
 
 describe('useAnalyzeMessage', () => {
@@ -23,7 +23,7 @@ describe('useAnalyzeMessage', () => {
       category: 'Technical Problem',
       urgency: 'High',
       reasoning: 'Outage reported.',
-      source: 'llm'
+      source: 'llm',
     })
 
     const { result } = renderHook(() => useAnalyzeMessage())
@@ -44,7 +44,7 @@ describe('useAnalyzeMessage', () => {
       category: 'Technical Problem',
       urgency: 'High',
       escalate: true,
-      source: 'llm'
+      source: 'llm',
     })
   })
 
@@ -53,7 +53,7 @@ describe('useAnalyzeMessage', () => {
       category: 'Feature Request',
       urgency: 'Low',
       reasoning: 'Nice-to-have.',
-      source: 'llm'
+      source: 'llm',
     })
 
     const { result } = renderHook(() => useAnalyzeMessage())
@@ -84,7 +84,7 @@ describe('useAnalyzeMessage', () => {
       category: 'General Inquiry',
       urgency: 'Low',
       reasoning: 'A question.',
-      source: 'llm'
+      source: 'llm',
     })
     const { result } = renderHook(() => useAnalyzeMessage())
 

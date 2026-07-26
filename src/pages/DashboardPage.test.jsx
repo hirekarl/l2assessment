@@ -10,10 +10,13 @@ describe('DashboardPage', () => {
   })
 
   it('renders stats, category distribution, and urgency breakdown from history', () => {
-    localStorage.setItem('triageHistory', JSON.stringify([
-      { category: 'Billing Issue', urgency: 'High', timestamp: new Date().toISOString() },
-      { category: 'Feature Request', urgency: 'Low', timestamp: new Date().toISOString() }
-    ]))
+    localStorage.setItem(
+      'triageHistory',
+      JSON.stringify([
+        { category: 'Billing Issue', urgency: 'High', timestamp: new Date().toISOString() },
+        { category: 'Feature Request', urgency: 'Low', timestamp: new Date().toISOString() },
+      ])
+    )
 
     render(<DashboardPage />)
 

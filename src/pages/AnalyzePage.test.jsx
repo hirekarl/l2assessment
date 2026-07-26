@@ -5,7 +5,7 @@ import AnalyzePage from './AnalyzePage.jsx'
 import { categorizeMessage } from '../utils/llmHelper.js'
 
 vi.mock('../utils/llmHelper.js', () => ({
-  categorizeMessage: vi.fn()
+  categorizeMessage: vi.fn(),
 }))
 
 describe('AnalyzePage', () => {
@@ -28,12 +28,15 @@ describe('AnalyzePage', () => {
       category: 'Billing Issue',
       urgency: 'High',
       reasoning: 'Duplicate charge.',
-      source: 'llm'
+      source: 'llm',
     })
     const user = userEvent.setup()
     render(<AnalyzePage />)
 
-    await user.type(screen.getByPlaceholderText('Paste customer message here...'), 'I was charged twice')
+    await user.type(
+      screen.getByPlaceholderText('Paste customer message here...'),
+      'I was charged twice'
+    )
     await user.click(screen.getByText('Analyze Message'))
 
     expect(await screen.findByText('Analysis Results')).toBeInTheDocument()
@@ -51,7 +54,10 @@ describe('AnalyzePage', () => {
 
   it('clears the message and results when Clear is clicked', async () => {
     categorizeMessage.mockResolvedValue({
-      category: 'General Inquiry', urgency: 'Low', reasoning: 'ok', source: 'llm'
+      category: 'General Inquiry',
+      urgency: 'Low',
+      reasoning: 'ok',
+      source: 'llm',
     })
     const user = userEvent.setup()
     render(<AnalyzePage />)

@@ -9,8 +9,12 @@ test.describe('Analyze -> History flow', () => {
     await page.goto('/analyze')
   })
 
-  test('analyzes a message and shows the fallback banner with category/urgency', async ({ page }) => {
-    await page.getByPlaceholder('Paste customer message here...').fill('My invoice is wrong, please refund me')
+  test('analyzes a message and shows the fallback banner with category/urgency', async ({
+    page,
+  }) => {
+    await page
+      .getByPlaceholder('Paste customer message here...')
+      .fill('My invoice is wrong, please refund me')
     await page.getByRole('button', { name: 'Analyze Message' }).click()
 
     await expect(page.getByText('Analysis Results')).toBeVisible()
@@ -19,7 +23,9 @@ test.describe('Analyze -> History flow', () => {
   })
 
   test('shows the escalate banner for a high-urgency outage message', async ({ page }) => {
-    await page.getByPlaceholder('Paste customer message here...').fill('The service is down for everyone, this is urgent')
+    await page
+      .getByPlaceholder('Paste customer message here...')
+      .fill('The service is down for everyone, this is urgent')
     await page.getByRole('button', { name: 'Analyze Message' }).click()
 
     await expect(page.getByText('⚠ ESCALATE')).toBeVisible()
@@ -37,7 +43,9 @@ test.describe('Analyze -> History flow', () => {
   })
 
   test('Clear resets the form and hides results', async ({ page }) => {
-    await page.getByPlaceholder('Paste customer message here...').fill('a question about my account')
+    await page
+      .getByPlaceholder('Paste customer message here...')
+      .fill('a question about my account')
     await page.getByRole('button', { name: 'Analyze Message' }).click()
     await expect(page.getByText('Analysis Results')).toBeVisible()
 

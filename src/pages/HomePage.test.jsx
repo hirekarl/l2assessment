@@ -20,14 +20,17 @@ describe('HomePage', () => {
   })
 
   it('shows stats and recent activity when history exists', () => {
-    localStorage.setItem('triageHistory', JSON.stringify([
-      {
-        message: 'Payment failed for my account',
-        category: 'Billing Issue',
-        urgency: 'High',
-        timestamp: new Date().toISOString()
-      }
-    ]))
+    localStorage.setItem(
+      'triageHistory',
+      JSON.stringify([
+        {
+          message: 'Payment failed for my account',
+          category: 'Billing Issue',
+          urgency: 'High',
+          timestamp: new Date().toISOString(),
+        },
+      ])
+    )
 
     renderHomePage()
 
@@ -37,10 +40,23 @@ describe('HomePage', () => {
   })
 
   it('styles Medium and Low urgency recent-activity badges distinctly from High', () => {
-    localStorage.setItem('triageHistory', JSON.stringify([
-      { message: 'a medium one', category: 'Technical Problem', urgency: 'Medium', timestamp: new Date().toISOString() },
-      { message: 'a low one', category: 'Feature Request', urgency: 'Low', timestamp: new Date().toISOString() }
-    ]))
+    localStorage.setItem(
+      'triageHistory',
+      JSON.stringify([
+        {
+          message: 'a medium one',
+          category: 'Technical Problem',
+          urgency: 'Medium',
+          timestamp: new Date().toISOString(),
+        },
+        {
+          message: 'a low one',
+          category: 'Feature Request',
+          urgency: 'Low',
+          timestamp: new Date().toISOString(),
+        },
+      ])
+    )
 
     renderHomePage()
 
@@ -60,7 +76,7 @@ describe('HomePage', () => {
     expect([
       "Our payment failed and we can't access our account",
       'The dashboard is loading very slowly',
-      'Can you add a dark mode feature?'
+      'Can you add a dark mode feature?',
     ]).toContain(stored)
   })
 })

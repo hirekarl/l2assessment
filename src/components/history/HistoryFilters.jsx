@@ -38,7 +38,7 @@ function HistoryFilters({ history, categories, filter, onFilterChange, onClearAl
           >
             All ({history.length})
           </button>
-          {categories.map(category => (
+          {categories.map((category) => (
             <button
               key={category}
               onClick={() => onFilterChange(category)}
@@ -48,7 +48,7 @@ function HistoryFilters({ history, categories, filter, onFilterChange, onClearAl
                   : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
               }`}
             >
-              {category} ({history.filter(h => h.category === category).length})
+              {category} ({history.filter((h) => h.category === category).length})
             </button>
           ))}
         </div>

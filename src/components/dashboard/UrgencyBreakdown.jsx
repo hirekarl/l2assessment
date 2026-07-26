@@ -15,21 +15,27 @@ function UrgencyBreakdown({ urgencyData, total }) {
               <div className="w-4 h-4 bg-red-500 rounded mr-2"></div>
               <span className="text-gray-700 dark:text-gray-300">High</span>
             </div>
-            <span className="text-2xl font-bold text-red-600 dark:text-red-400">{urgencyData.High}</span>
+            <span className="text-2xl font-bold text-red-600 dark:text-red-400">
+              {urgencyData.High}
+            </span>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <div className="w-4 h-4 bg-yellow-500 rounded mr-2"></div>
               <span className="text-gray-700 dark:text-gray-300">Medium</span>
             </div>
-            <span className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{urgencyData.Medium}</span>
+            <span className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
+              {urgencyData.Medium}
+            </span>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <div className="w-4 h-4 bg-green-500 rounded mr-2"></div>
               <span className="text-gray-700 dark:text-gray-300">Low</span>
             </div>
-            <span className="text-2xl font-bold text-green-600 dark:text-green-400">{urgencyData.Low}</span>
+            <span className="text-2xl font-bold text-green-600 dark:text-green-400">
+              {urgencyData.Low}
+            </span>
           </div>
         </div>
       )}

@@ -14,10 +14,15 @@ describe('CategoryDistribution', () => {
   })
 
   it('renders each category with its count and percentage', () => {
-    render(<CategoryDistribution
-      categoryData={[{ name: 'Billing Issue', count: 3 }, { name: 'Feature Request', count: 1 }]}
-      total={4}
-    />)
+    render(
+      <CategoryDistribution
+        categoryData={[
+          { name: 'Billing Issue', count: 3 },
+          { name: 'Feature Request', count: 1 },
+        ]}
+        total={4}
+      />
+    )
 
     expect(screen.getByText('Billing Issue')).toBeInTheDocument()
     expect(screen.getByText('3 (75%)')).toBeInTheDocument()

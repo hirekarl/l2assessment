@@ -25,8 +25,8 @@ describe('getRecommendedAction', () => {
   })
 
   it('gives a distinct action per category (no copy-paste bugs)', () => {
-    const categories = getAvailableCategories().filter(c => c !== 'Unknown')
-    const actions = categories.map(c => getRecommendedAction(c, 'Medium'))
+    const categories = getAvailableCategories().filter((c) => c !== 'Unknown')
+    const actions = categories.map((c) => getRecommendedAction(c, 'Medium'))
     expect(new Set(actions).size).toBe(actions.length)
   })
 })
@@ -34,7 +34,13 @@ describe('getRecommendedAction', () => {
 describe('getAvailableCategories', () => {
   it('includes all four documented categories plus Unknown', () => {
     expect(getAvailableCategories()).toEqual(
-      expect.arrayContaining(['Billing Issue', 'Technical Problem', 'General Inquiry', 'Feature Request', 'Unknown'])
+      expect.arrayContaining([
+        'Billing Issue',
+        'Technical Problem',
+        'General Inquiry',
+        'Feature Request',
+        'Unknown',
+      ])
     )
   })
 })

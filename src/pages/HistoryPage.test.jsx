@@ -15,20 +15,40 @@ describe('HistoryPage', () => {
 
   it('sorts history newest-first', () => {
     seed([
-      { message: 'older', category: 'General Inquiry', urgency: 'Low', timestamp: '2026-01-01T00:00:00.000Z' },
-      { message: 'newer', category: 'General Inquiry', urgency: 'Low', timestamp: '2026-06-01T00:00:00.000Z' }
+      {
+        message: 'older',
+        category: 'General Inquiry',
+        urgency: 'Low',
+        timestamp: '2026-01-01T00:00:00.000Z',
+      },
+      {
+        message: 'newer',
+        category: 'General Inquiry',
+        urgency: 'Low',
+        timestamp: '2026-06-01T00:00:00.000Z',
+      },
     ])
     render(<HistoryPage />)
 
-    const messages = screen.getAllByText(/"(older|newer)"/).map(el => el.textContent)
+    const messages = screen.getAllByText(/"(older|newer)"/).map((el) => el.textContent)
     expect(messages[0]).toContain('newer')
     expect(messages[1]).toContain('older')
   })
 
   it('filters by category when a filter chip is clicked', async () => {
     seed([
-      { message: 'a billing issue', category: 'Billing Issue', urgency: 'Low', timestamp: new Date().toISOString() },
-      { message: 'a feature idea', category: 'Feature Request', urgency: 'Low', timestamp: new Date().toISOString() }
+      {
+        message: 'a billing issue',
+        category: 'Billing Issue',
+        urgency: 'Low',
+        timestamp: new Date().toISOString(),
+      },
+      {
+        message: 'a feature idea',
+        category: 'Feature Request',
+        urgency: 'Low',
+        timestamp: new Date().toISOString(),
+      },
     ])
     const user = userEvent.setup()
     render(<HistoryPage />)
@@ -40,7 +60,14 @@ describe('HistoryPage', () => {
   })
 
   it('clears all history after confirmation', async () => {
-    seed([{ message: 'to be cleared', category: 'General Inquiry', urgency: 'Low', timestamp: new Date().toISOString() }])
+    seed([
+      {
+        message: 'to be cleared',
+        category: 'General Inquiry',
+        urgency: 'Low',
+        timestamp: new Date().toISOString(),
+      },
+    ])
     vi.spyOn(window, 'confirm').mockReturnValue(true)
     const user = userEvent.setup()
     render(<HistoryPage />)
@@ -52,7 +79,14 @@ describe('HistoryPage', () => {
   })
 
   it('does not clear history if the confirmation is declined', async () => {
-    seed([{ message: 'stays', category: 'General Inquiry', urgency: 'Low', timestamp: new Date().toISOString() }])
+    seed([
+      {
+        message: 'stays',
+        category: 'General Inquiry',
+        urgency: 'Low',
+        timestamp: new Date().toISOString(),
+      },
+    ])
     vi.spyOn(window, 'confirm').mockReturnValue(false)
     const user = userEvent.setup()
     render(<HistoryPage />)
@@ -63,10 +97,16 @@ describe('HistoryPage', () => {
   })
 
   it('expands an item to show its full details on click, and collapses it again on a second click', async () => {
-    seed([{
-      message: 'short', category: 'General Inquiry', urgency: 'Low',
-      recommendedAction: 'Do the thing', reasoning: 'Because', timestamp: new Date().toISOString()
-    }])
+    seed([
+      {
+        message: 'short',
+        category: 'General Inquiry',
+        urgency: 'Low',
+        recommendedAction: 'Do the thing',
+        reasoning: 'Because',
+        timestamp: new Date().toISOString(),
+      },
+    ])
     const user = userEvent.setup()
     render(<HistoryPage />)
 

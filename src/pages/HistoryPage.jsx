@@ -14,15 +14,12 @@ function HistoryPage() {
     }
   }
 
-  const sortedHistory = [...history].sort((a, b) =>
-    new Date(b.timestamp) - new Date(a.timestamp)
-  )
+  const sortedHistory = [...history].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
 
-  const filteredHistory = filter === 'all'
-    ? sortedHistory
-    : sortedHistory.filter(item => item.category === filter)
+  const filteredHistory =
+    filter === 'all' ? sortedHistory : sortedHistory.filter((item) => item.category === filter)
 
-  const categories = [...new Set(history.map(item => item.category))]
+  const categories = [...new Set(history.map((item) => item.category))]
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">

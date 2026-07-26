@@ -19,7 +19,9 @@ describe('calculateUrgency', () => {
   })
 
   it('starts at a baseline that resolves to Medium for a plain, average-length message', () => {
-    expect(calculateUrgency('This is an ordinary customer message of medium length used for testing')).toBe('Medium')
+    expect(
+      calculateUrgency('This is an ordinary customer message of medium length used for testing')
+    ).toBe('Medium')
   })
 
   it('increases the score with each exclamation mark', () => {
@@ -41,7 +43,9 @@ describe('calculateUrgency', () => {
   })
 
   it('decreases the score for polite words', () => {
-    expect(calculateUrgency('Thank you so much, I appreciate your help with this long request')).toBe('Low')
+    expect(
+      calculateUrgency('Thank you so much, I appreciate your help with this long request')
+    ).toBe('Low')
   })
 
   it('decreases the score for questions', () => {
@@ -61,7 +65,9 @@ describe('calculateUrgency', () => {
   })
 
   it('decreases the score for positive words', () => {
-    expect(calculateUrgency('This is great, I love how wonderful and excellent this product is')).toBe('Low')
+    expect(
+      calculateUrgency('This is great, I love how wonderful and excellent this product is')
+    ).toBe('Low')
   })
 
   it('returns Low for a heavily-penalized short polite question', () => {
@@ -69,6 +75,10 @@ describe('calculateUrgency', () => {
   })
 
   it('returns High for a long, urgent, exclamation-heavy message', () => {
-    expect(calculateUrgency('URGENT ISSUE!!! Our production system is completely down and losing money every minute!!!'.toLowerCase())).toBe('High')
+    expect(
+      calculateUrgency(
+        'URGENT ISSUE!!! Our production system is completely down and losing money every minute!!!'.toLowerCase()
+      )
+    ).toBe('High')
   })
 })

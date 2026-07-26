@@ -18,7 +18,9 @@ describe('ThemeProvider / useTheme', () => {
   })
 
   it('throws when useTheme is called outside a ThemeProvider', () => {
-    expect(() => renderHook(() => useTheme())).toThrow('useTheme must be used within a ThemeProvider')
+    expect(() => renderHook(() => useTheme())).toThrow(
+      'useTheme must be used within a ThemeProvider'
+    )
   })
 
   it('defaults to the OS preference when no theme is stored', () => {

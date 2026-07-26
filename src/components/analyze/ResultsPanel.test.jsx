@@ -9,7 +9,7 @@ const baseResults = {
   recommendedAction: 'Escalate to billing.',
   reasoning: 'Duplicate charge reported.',
   escalate: true,
-  source: 'llm'
+  source: 'llm',
 }
 
 describe('ResultsPanel', () => {
@@ -23,7 +23,9 @@ describe('ResultsPanel', () => {
   })
 
   it('shows the fallback banner with the reason for mock-sourced results', () => {
-    render(<ResultsPanel results={{ ...baseResults, source: 'mock', mockReason: 'Invalid API key' }} />)
+    render(
+      <ResultsPanel results={{ ...baseResults, source: 'mock', mockReason: 'Invalid API key' }} />
+    )
     expect(screen.getByText('⚠ Fallback Mode')).toBeInTheDocument()
     expect(screen.getByText(/Invalid API key/)).toBeInTheDocument()
   })
@@ -56,9 +58,7 @@ describe('ResultsPanel', () => {
 
     await user.click(screen.getByText('📋 Copy Results'))
 
-    expect(writeTextSpy).toHaveBeenCalledWith(
-      expect.stringContaining('Category: Billing Issue')
-    )
+    expect(writeTextSpy).toHaveBeenCalledWith(expect.stringContaining('Category: Billing Issue'))
     expect(window.alert).toHaveBeenCalledWith('Results copied to clipboard!')
   })
 })

@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest'
-import { getMockCategorization, VALID_CATEGORIES, VALID_URGENCIES, SYSTEM_PROMPT } from './categorization.js'
+import {
+  getMockCategorization,
+  VALID_CATEGORIES,
+  VALID_URGENCIES,
+  SYSTEM_PROMPT,
+} from './categorization.js'
 
 describe('getMockCategorization', () => {
   it('categorizes billing keywords as Billing Issue with Medium urgency by default', () => {
@@ -59,7 +64,10 @@ describe('getMockCategorization', () => {
 describe('categorization constants', () => {
   it('exposes exactly the four documented categories', () => {
     expect(VALID_CATEGORIES).toEqual([
-      'Billing Issue', 'Technical Problem', 'Feature Request', 'General Inquiry'
+      'Billing Issue',
+      'Technical Problem',
+      'Feature Request',
+      'General Inquiry',
     ])
   })
 

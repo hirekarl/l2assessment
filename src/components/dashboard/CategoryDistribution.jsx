@@ -5,7 +5,9 @@
 function CategoryDistribution({ categoryData, total }) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-      <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Category Distribution</h2>
+      <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+        Category Distribution
+      </h2>
       {categoryData.length === 0 ? (
         <div className="text-center text-gray-500 dark:text-gray-400 py-8">No data yet</div>
       ) : (
@@ -16,7 +18,9 @@ function CategoryDistribution({ categoryData, total }) {
               <div key={cat.name}>
                 <div className="flex justify-between text-sm mb-1">
                   <span className="text-gray-700 dark:text-gray-300">{cat.name}</span>
-                  <span className="text-gray-600 dark:text-gray-400">{cat.count} ({percentage.toFixed(0)}%)</span>
+                  <span className="text-gray-600 dark:text-gray-400">
+                    {cat.count} ({percentage.toFixed(0)}%)
+                  </span>
                 </div>
                 <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                   <div

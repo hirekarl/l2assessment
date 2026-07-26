@@ -24,13 +24,18 @@ Respond with this JSON structure:
   "category": "<one of the four categories above>",
   "urgency": "<High|Medium|Low>",
   "reasoning": "<1-2 sentences explaining your classification>"
-}`;
+}`
 
 /** The only valid category values a classification result may have. */
-export const VALID_CATEGORIES = ["Billing Issue", "Technical Problem", "Feature Request", "General Inquiry"];
+export const VALID_CATEGORIES = [
+  'Billing Issue',
+  'Technical Problem',
+  'Feature Request',
+  'General Inquiry',
+]
 
 /** The only valid urgency values a classification result may have. */
-export const VALID_URGENCIES = ["High", "Medium", "Low"];
+export const VALID_URGENCIES = ['High', 'Medium', 'Low']
 
 /**
  * Keyword-based categorization used whenever the real LLM is unavailable
@@ -39,38 +44,77 @@ export const VALID_URGENCIES = ["High", "Medium", "Low"];
  * @returns {{category: string, urgency: string, reasoning: string}}
  */
 export function getMockCategorization(message) {
-  const lower = message.toLowerCase();
+  const lower = message.toLowerCase()
 
-  const hasAny = (...terms) => terms.some(t => lower.includes(t));
+  const hasAny = (...terms) => terms.some((t) => lower.includes(t))
 
-  if (hasAny('bill', 'payment', 'charge', 'invoice', 'credit card', 'subscription', 'refund', 'cancel')) {
+  if (
+    hasAny(
+      'bill',
+      'payment',
+      'charge',
+      'invoice',
+      'credit card',
+      'subscription',
+      'refund',
+      'cancel'
+    )
+  ) {
     return {
-      category: "Billing Issue",
-      urgency: hasAny('urgent', 'asap', 'immediately', 'fraud') ? "High" : "Medium",
-      reasoning: "Message contains billing-related keywords such as payments, charges, or account cancellation."
-    };
+      category: 'Billing Issue',
+      urgency: hasAny('urgent', 'asap', 'immediately', 'fraud') ? 'High' : 'Medium',
+      reasoning:
+        'Message contains billing-related keywords such as payments, charges, or account cancellation.',
+    }
   }
 
-  if (hasAny('bug', 'error', 'broken', 'not working', 'crash', 'down', 'outage', 'slow', 'issue', 'problem')) {
-    const isHigh = hasAny('down', 'outage', 'urgent', 'asap', 'immediately') || message.includes('!!')
+  if (
+    hasAny(
+      'bug',
+      'error',
+      'broken',
+      'not working',
+      'crash',
+      'down',
+      'outage',
+      'slow',
+      'issue',
+      'problem'
+    )
+  ) {
+    const isHigh =
+      hasAny('down', 'outage', 'urgent', 'asap', 'immediately') || message.includes('!!')
     return {
-      category: "Technical Problem",
-      urgency: isHigh ? "High" : "Medium",
-      reasoning: "Message describes a technical malfunction or error that is impacting the customer's use of the product."
-    };
+      category: 'Technical Problem',
+      urgency: isHigh ? 'High' : 'Medium',
+      reasoning:
+        "Message describes a technical malfunction or error that is impacting the customer's use of the product.",
+    }
   }
 
-  if (hasAny('feature', 'improve', 'suggestion', 'wish', 'enhancement', 'would be great', 'would love')) {
+  if (
+    hasAny(
+      'feature',
+      'improve',
+      'suggestion',
+      'wish',
+      'enhancement',
+      'would be great',
+      'would love'
+    )
+  ) {
     return {
-      category: "Feature Request",
-      urgency: "Low",
-      reasoning: "Customer is requesting a new feature or product improvement rather than reporting an issue."
-    };
+      category: 'Feature Request',
+      urgency: 'Low',
+      reasoning:
+        'Customer is requesting a new feature or product improvement rather than reporting an issue.',
+    }
   }
 
   return {
-    category: "General Inquiry",
-    urgency: "Low",
-    reasoning: "Message appears to be a general question or inquiry that does not indicate a critical issue."
-  };
+    category: 'General Inquiry',
+    urgency: 'Low',
+    reasoning:
+      'Message appears to be a general question or inquiry that does not indicate a critical issue.',
+  }
 }

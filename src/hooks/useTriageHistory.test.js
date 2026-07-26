@@ -35,7 +35,7 @@ describe('useTriageHistory', () => {
       result.current.appendEntry({ message: 'second' })
     })
 
-    expect(result.current.history.map(h => h.message)).toEqual(['first', 'second'])
+    expect(result.current.history.map((h) => h.message)).toEqual(['first', 'second'])
   })
 
   it('clearHistory empties both state and localStorage', () => {

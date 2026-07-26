@@ -17,21 +17,24 @@ describe('categorizeMessage', () => {
         category: 'Billing Issue',
         urgency: 'High',
         reasoning: 'Customer reports a duplicate charge.',
-        source: 'llm'
-      })
+        source: 'llm',
+      }),
     })
 
     const result = await categorizeMessage('I was charged twice')
 
-    expect(global.fetch).toHaveBeenCalledWith('/api/categorize', expect.objectContaining({
-      method: 'POST',
-      body: JSON.stringify({ message: 'I was charged twice' })
-    }))
+    expect(global.fetch).toHaveBeenCalledWith(
+      '/api/categorize',
+      expect.objectContaining({
+        method: 'POST',
+        body: JSON.stringify({ message: 'I was charged twice' }),
+      })
+    )
     expect(result).toEqual({
       category: 'Billing Issue',
       urgency: 'High',
       reasoning: 'Customer reports a duplicate charge.',
-      source: 'llm'
+      source: 'llm',
     })
   })
 
@@ -58,7 +61,9 @@ describe('categorizeMessage', () => {
   it('falls back gracefully when the response body is not valid JSON', async () => {
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => { throw new SyntaxError('Unexpected token') }
+      json: async () => {
+        throw new SyntaxError('Unexpected token')
+      },
     })
 
     const result = await categorizeMessage('How do I reset my password?')

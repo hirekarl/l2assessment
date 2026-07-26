@@ -4,7 +4,7 @@ test.describe('Dark mode toggle', () => {
   test('toggles the dark class on <html> and persists across reload', async ({ page }) => {
     await page.goto('/')
     const html = page.locator('html')
-    const isDark = () => html.evaluate(el => el.classList.contains('dark'))
+    const isDark = () => html.evaluate((el) => el.classList.contains('dark'))
 
     const initiallyDark = await isDark()
     const toggleName = initiallyDark ? 'Switch to light mode' : 'Switch to dark mode'

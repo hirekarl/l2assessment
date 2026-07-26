@@ -32,7 +32,7 @@ export function useAnalyzeMessage() {
         reasoning,
         source,
         mockReason,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       }
 
       setResults(analysisResult)

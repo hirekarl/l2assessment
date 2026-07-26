@@ -36,9 +36,7 @@ function Navigation() {
             <Link
               to="/"
               className={`px-4 py-2 rounded ${
-                isActive('/') 
-                  ? 'bg-blue-700 font-semibold' 
-                  : 'hover:bg-blue-500'
+                isActive('/') ? 'bg-blue-700 font-semibold' : 'hover:bg-blue-500'
               }`}
             >
               Home
@@ -46,9 +44,7 @@ function Navigation() {
             <Link
               to="/analyze"
               className={`px-4 py-2 rounded ${
-                isActive('/analyze') 
-                  ? 'bg-blue-700 font-semibold' 
-                  : 'hover:bg-blue-500'
+                isActive('/analyze') ? 'bg-blue-700 font-semibold' : 'hover:bg-blue-500'
               }`}
             >
               Analyze
@@ -56,9 +52,7 @@ function Navigation() {
             <Link
               to="/history"
               className={`px-4 py-2 rounded ${
-                isActive('/history') 
-                  ? 'bg-blue-700 font-semibold' 
-                  : 'hover:bg-blue-500'
+                isActive('/history') ? 'bg-blue-700 font-semibold' : 'hover:bg-blue-500'
               }`}
             >
               History
@@ -66,9 +60,7 @@ function Navigation() {
             <Link
               to="/dashboard"
               className={`px-4 py-2 rounded ${
-                isActive('/dashboard') 
-                  ? 'bg-blue-700 font-semibold' 
-                  : 'hover:bg-blue-500'
+                isActive('/dashboard') ? 'bg-blue-700 font-semibold' : 'hover:bg-blue-500'
               }`}
             >
               Dashboard

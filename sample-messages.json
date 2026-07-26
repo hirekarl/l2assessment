@@ -50,10 +50,7 @@
       "id": 6,
       "title": "Urgent Short Message",
       "message": "Server down now",
-      "expectedIssues": [
-        "Marked as Low urgency due to short length",
-        "Actually very urgent"
-      ]
+      "expectedIssues": ["Marked as Low urgency due to short length", "Actually very urgent"]
     },
     {
       "id": 7,

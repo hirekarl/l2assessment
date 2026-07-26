@@ -21,8 +21,14 @@ function mockRes() {
   return {
     statusCode: null,
     body: null,
-    status(code) { this.statusCode = code; return this },
-    json(payload) { this.body = payload; return this }
+    status(code) {
+      this.statusCode = code
+      return this
+    },
+    json(payload) {
+      this.body = payload
+      return this
+    },
   }
 }
 
@@ -64,7 +70,9 @@ describe('POST /api/categorize', () => {
 
   it('defaults reasoning to a placeholder when the model omits it', async () => {
     createMock.mockResolvedValue({
-      choices: [{ message: { content: JSON.stringify({ category: 'General Inquiry', urgency: 'Low' }) } }]
+      choices: [
+        { message: { content: JSON.stringify({ category: 'General Inquiry', urgency: 'Low' }) } },
+      ],
     })
     const { default: handler } = await import('./categorize.js')
     const res = mockRes()
@@ -76,7 +84,17 @@ describe('POST /api/categorize', () => {
 
   it('reuses the memoized Groq client across multiple invocations', async () => {
     createMock.mockResolvedValue({
-      choices: [{ message: { content: JSON.stringify({ category: 'General Inquiry', urgency: 'Low', reasoning: 'x' }) } }]
+      choices: [
+        {
+          message: {
+            content: JSON.stringify({
+              category: 'General Inquiry',
+              urgency: 'Low',
+              reasoning: 'x',
+            }),
+          },
+        },
+      ],
     })
     const { default: handler } = await import('./categorize.js')
     const res1 = mockRes()
@@ -91,9 +109,17 @@ describe('POST /api/categorize', () => {
 
   it('returns an llm-sourced result on success', async () => {
     createMock.mockResolvedValue({
-      choices: [{ message: { content: JSON.stringify({
-        category: 'Billing Issue', urgency: 'High', reasoning: 'Duplicate charge.'
-      }) } }]
+      choices: [
+        {
+          message: {
+            content: JSON.stringify({
+              category: 'Billing Issue',
+              urgency: 'High',
+              reasoning: 'Duplicate charge.',
+            }),
+          },
+        },
+      ],
     })
     const { default: handler } = await import('./categorize.js')
     const res = mockRes()
@@ -102,15 +128,26 @@ describe('POST /api/categorize', () => {
 
     expect(res.statusCode).toBe(200)
     expect(res.body).toEqual({
-      category: 'Billing Issue', urgency: 'High', reasoning: 'Duplicate charge.', source: 'llm'
+      category: 'Billing Issue',
+      urgency: 'High',
+      reasoning: 'Duplicate charge.',
+      source: 'llm',
     })
   })
 
   it('normalizes an invalid category/urgency from the model', async () => {
     createMock.mockResolvedValue({
-      choices: [{ message: { content: JSON.stringify({
-        category: 'Not Real', urgency: 'Critical', reasoning: 'x'
-      }) } }]
+      choices: [
+        {
+          message: {
+            content: JSON.stringify({
+              category: 'Not Real',
+              urgency: 'Critical',
+              reasoning: 'x',
+            }),
+          },
+        },
+      ],
     })
     const { default: handler } = await import('./categorize.js')
     const res = mockRes()

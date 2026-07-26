@@ -4,8 +4,8 @@ import { useTriageHistory } from '../hooks/useTriageHistory'
 function HomePage() {
   const { history } = useTriageHistory()
   const today = new Date().toDateString()
-  const todayCount = history.filter(item =>
-    new Date(item.timestamp).toDateString() === today
+  const todayCount = history.filter(
+    (item) => new Date(item.timestamp).toDateString() === today
   ).length
 
   const stats = { total: history.length, today: todayCount }
@@ -23,10 +23,10 @@ function HomePage() {
             AI-powered message categorization and routing for customer support teams
           </p>
           <p className="text-gray-700 dark:text-gray-300">
-            Relay AI is a subscription-based customer operations platform that uses AI to categorize,
-            prioritize, and route incoming customer messages for small businesses. Our SaaS model is
-            built around boosting team efficiency and enabling companies to handle more customer
-            volume without hiring additional support staff.
+            Relay AI is a subscription-based customer operations platform that uses AI to
+            categorize, prioritize, and route incoming customer messages for small businesses. Our
+            SaaS model is built around boosting team efficiency and enabling companies to handle
+            more customer volume without hiring additional support staff.
           </p>
         </div>
 
@@ -37,7 +37,9 @@ function HomePage() {
             <div className="text-sm text-gray-600 dark:text-gray-400">Total Messages Analyzed</div>
           </div>
           <div className="bg-green-50 dark:bg-green-950/40 border border-green-200 dark:border-green-800 rounded-lg p-6">
-            <div className="text-3xl font-bold text-green-600 dark:text-green-400">{stats.today}</div>
+            <div className="text-3xl font-bold text-green-600 dark:text-green-400">
+              {stats.today}
+            </div>
             <div className="text-sm text-gray-600 dark:text-gray-400">Analyzed Today</div>
           </div>
         </div>
@@ -66,8 +68,8 @@ function HomePage() {
             onClick={() => {
               const examples = [
                 "Our payment failed and we can't access our account",
-                "The dashboard is loading very slowly",
-                "Can you add a dark mode feature?"
+                'The dashboard is loading very slowly',
+                'Can you add a dark mode feature?',
               ]
               const random = examples[Math.floor(Math.random() * examples.length)]
               localStorage.setItem('exampleMessage', random)
@@ -84,7 +86,9 @@ function HomePage() {
         {/* Recent Activity */}
         {recentActivity.length > 0 && (
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">Recent Activity</h2>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+              Recent Activity
+            </h2>
             <div className="space-y-3">
               {recentActivity.map((item, index) => (
                 <div key={index} className="border-l-4 border-blue-500 pl-4 py-2">
@@ -100,11 +104,15 @@ function HomePage() {
                         <span className="text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 px-2 py-1 rounded">
                           {item.category}
                         </span>
-                        <span className={`text-xs px-2 py-1 rounded ${
-                          item.urgency === 'High' ? 'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300' :
-                          item.urgency === 'Medium' ? 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300' :
-                          'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300'
-                        }`}>
+                        <span
+                          className={`text-xs px-2 py-1 rounded ${
+                            item.urgency === 'High'
+                              ? 'bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300'
+                              : item.urgency === 'Medium'
+                                ? 'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-300'
+                                : 'bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300'
+                          }`}
+                        >
                           {item.urgency}
                         </span>
                       </div>

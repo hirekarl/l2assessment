@@ -1,4 +1,4 @@
-import { getMockCategorization } from '../../shared/categorization.js';
+import { getMockCategorization } from '../../shared/categorization.js'
 
 /**
  * Categorizes a customer message via the /api/categorize serverless function,
@@ -12,17 +12,17 @@ export async function categorizeMessage(message) {
     const response = await fetch('/api/categorize', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message })
-    });
+      body: JSON.stringify({ message }),
+    })
 
     if (!response.ok) {
-      throw new Error(`Backend returned ${response.status}`);
+      throw new Error(`Backend returned ${response.status}`)
     }
 
-    return await response.json();
+    return await response.json()
   } catch (error) {
-    const mockReason = error instanceof TypeError ? 'Network error' : 'Backend unavailable';
-    console.warn(`Categorize API unreachable (${mockReason}), using local mock:`, error);
-    return { ...getMockCategorization(message), source: 'mock', mockReason };
+    const mockReason = error instanceof TypeError ? 'Network error' : 'Backend unavailable'
+    console.warn(`Categorize API unreachable (${mockReason}), using local mock:`, error)
+    return { ...getMockCategorization(message), source: 'mock', mockReason }
   }
 }

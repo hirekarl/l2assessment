@@ -10,7 +10,7 @@ const baseItem = {
   urgency: 'High',
   escalate: true,
   recommendedAction: 'Escalate to billing.',
-  reasoning: 'Because reasons.'
+  reasoning: 'Because reasons.',
 }
 
 describe('HistoryItem', () => {
@@ -23,33 +23,61 @@ describe('HistoryItem', () => {
   })
 
   it('does not show the Fallback badge for llm-sourced entries', () => {
-    render(<HistoryItem item={{ ...baseItem, source: 'llm' }} isExpanded={false} onToggle={() => {}} />)
+    render(
+      <HistoryItem item={{ ...baseItem, source: 'llm' }} isExpanded={false} onToggle={() => {}} />
+    )
     expect(screen.queryByText('⚠ Fallback')).not.toBeInTheDocument()
   })
 
   it('shows the Fallback badge for mock-sourced entries', () => {
-    render(<HistoryItem item={{ ...baseItem, source: 'mock', mockReason: 'Invalid API key' }} isExpanded={false} onToggle={() => {}} />)
+    render(
+      <HistoryItem
+        item={{ ...baseItem, source: 'mock', mockReason: 'Invalid API key' }}
+        isExpanded={false}
+        onToggle={() => {}}
+      />
+    )
     expect(screen.getByText('⚠ Fallback')).toBeInTheDocument()
   })
 
   it('falls back to a generic tooltip when a mock entry has no mockReason', () => {
-    render(<HistoryItem item={{ ...baseItem, source: 'mock', mockReason: undefined }} isExpanded={false} onToggle={() => {}} />)
+    render(
+      <HistoryItem
+        item={{ ...baseItem, source: 'mock', mockReason: undefined }}
+        isExpanded={false}
+        onToggle={() => {}}
+      />
+    )
     expect(screen.getByText('⚠ Fallback')).toHaveAttribute('title', 'Fallback mode')
   })
 
   it('truncates messages longer than 100 characters with an ellipsis', () => {
     const longMessage = 'a'.repeat(150)
-    render(<HistoryItem item={{ ...baseItem, message: longMessage }} isExpanded={false} onToggle={() => {}} />)
+    render(
+      <HistoryItem
+        item={{ ...baseItem, message: longMessage }}
+        isExpanded={false}
+        onToggle={() => {}}
+      />
+    )
     expect(screen.getByText(`"${'a'.repeat(100)}..."`)).toBeInTheDocument()
   })
 
   it('styles Medium urgency distinctly', () => {
-    render(<HistoryItem item={{ ...baseItem, urgency: 'Medium' }} isExpanded={false} onToggle={() => {}} />)
+    render(
+      <HistoryItem
+        item={{ ...baseItem, urgency: 'Medium' }}
+        isExpanded={false}
+        onToggle={() => {}}
+      />
+    )
     expect(screen.getByText('Medium Urgency')).toBeInTheDocument()
   })
 
   it('hides expanded details when collapsed and shows them when expanded', () => {
-    const { rerender } = render(<HistoryItem item={baseItem} isExpanded={false} onToggle={() => {}} />)
+    const { rerender } = render(
+      <HistoryItem item={baseItem} isExpanded={false} onToggle={() => {}} />
+    )
     expect(screen.queryByText('Full Message')).not.toBeInTheDocument()
 
     rerender(<HistoryItem item={baseItem} isExpanded={true} onToggle={() => {}} />)
