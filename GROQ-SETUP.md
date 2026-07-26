@@ -5,13 +5,13 @@
 ✅ **Completely Free** - No credit card required  
 ✅ **Fast** - Groq's LPU technology provides incredibly fast inference  
 ✅ **Generous Limits** - ~14,400 requests/day on free tier  
-✅ **High Quality** - Llama 3.3 70B model performs excellently  
+✅ **High Quality** - Llama 3.3 70B model performs excellently
 
 ## Step-by-Step Setup
 
 ### 1. Sign Up for Groq
 
-Visit: https://console.groq.com
+Visit: <https://console.groq.com>
 
 - Click "Sign Up" or "Get Started"
 - Use your email or sign in with Google/GitHub
@@ -21,7 +21,7 @@ Visit: https://console.groq.com
 
 Once logged in:
 
-1. Go to: https://console.groq.com/keys
+1. Go to: <https://console.groq.com/keys>
 2. Click "Create API Key"
 3. Give it a name (e.g., "Customer Triage App")
 4. Click "Submit"
@@ -35,12 +35,12 @@ Once logged in:
 2. Create or edit the `.env.local` file in the root directory
 3. Add your key:
 
-```
+```env
 GROQ_API_KEY=gsk_your-actual-key-here
 ```
 
-4. Save the file
-5. Run the full stack (frontend + the `/api/categorize` serverless function) with:
+1. Save the file
+2. Run the full stack (frontend + the `/api/categorize` serverless function) with:
 
 ```bash
 npm run dev:full
@@ -51,7 +51,7 @@ endpoint requires `vercel dev`, which also serves `api/categorize.js` locally.)
 
 ### 4. Test It Out
 
-1. Open http://localhost:5173
+1. Open <http://localhost:5173>
 2. Go to the "Analyze" tab
 3. Paste a test message: "Our server is down"
 4. Click "Analyze Message"
@@ -64,6 +64,7 @@ endpoint requires `vercel dev`, which also serves `api/categorize.js` locally.)
 **Problem**: The app can't find your API key
 
 **Solution**:
+
 - Make sure file is named `.env.local` (not `.env`)
 - Check that the key starts with `gsk_`
 - Restart the dev server after adding the key
@@ -74,6 +75,7 @@ endpoint requires `vercel dev`, which also serves `api/categorize.js` locally.)
 **Problem**: You've hit the free tier limit
 
 **Solutions**:
+
 - Wait a few minutes and try again
 - Create a new Groq account with a different email
 - Use the built-in mock responses (automatic fallback)
@@ -83,7 +85,8 @@ endpoint requires `vercel dev`, which also serves `api/categorize.js` locally.)
 **Problem**: API returns 401 Unauthorized
 
 **Solution**:
-- Regenerate a new key at https://console.groq.com/keys
+
+- Regenerate a new key at <https://console.groq.com/keys>
 - Delete the old key
 - Update `.env.local` with the new key
 - Restart dev server
@@ -91,6 +94,7 @@ endpoint requires `vercel dev`, which also serves `api/categorize.js` locally.)
 ## Mock Mode (No API Key Needed)
 
 If you don't want to use an API key, the app automatically falls back to **mock responses** when:
+
 - No API key is configured
 - API key is invalid
 - Rate limit is exceeded
@@ -113,10 +117,10 @@ This is more than enough for development and testing!
 
 ## Need Help?
 
-- Groq Documentation: https://console.groq.com/docs
-- Groq Discord: https://groq.com/discord
+- Groq Documentation: <https://console.groq.com/docs>
+- Groq Discord: <https://groq.com/discord>
 - Project README: See `README.md` in this folder
 
 ---
 
-**Happy Triaging! 🚀**
+Happy Triaging! 🚀
