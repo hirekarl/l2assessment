@@ -1,0 +1,8 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["src/main.tsx", "shared/categorization.ts", "api/categorize.ts"],
+  "exclude": ["**/*.test.ts", "**/*.test.tsx", "src/test/**"],
+  "out": "docs/api",
+  "readme": "README.md",
+  "commentStyle": "all"
+}

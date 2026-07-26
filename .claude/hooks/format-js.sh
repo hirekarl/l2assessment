@@ -4,12 +4,12 @@ cd "$(git rev-parse --show-toplevel 2>/dev/null || pwd)" || exit 0
 f=$(jq -r '.tool_response.filePath // .tool_input.file_path // empty')
 
 case "$f" in
-  *.js | *.jsx) ;;
+  *.js | *.jsx | *.ts | *.tsx) ;;
   *) exit 0 ;;
 esac
 
 case "$f" in
-  */node_modules/* | */dist/* | */coverage/* | */playwright-report/* | */test-results/* | */.vercel/*) exit 0 ;;
+  */node_modules/* | */dist/* | */coverage/* | */playwright-report/* | */test-results/* | */.vercel/* | */docs/*) exit 0 ;;
 esac
 
 [ -f "$f" ] || exit 0

@@ -1,0 +1,57 @@
+import type { Category, Urgency } from '../types/triage'
+
+const actionTemplates: Record<string, string> = {
+  'Billing Issue':
+    "Review the customer's billing history and recent charges. If there's an error, issue a correction or connect them with the billing team.",
+  'Technical Problem':
+    'Reproduce the reported issue and check error logs. If confirmed, escalate to engineering with steps to reproduce.',
+  'General Inquiry':
+    'Respond with the relevant FAQ or documentation link. If no article covers it, draft a direct answer.',
+  'Feature Request':
+    'Log the request in the product feedback tracker and send the customer an acknowledgment.',
+  Unknown: 'Review manually — the message could not be automatically classified.',
+}
+
+const urgentOverrides: Record<string, string> = {
+  'Billing Issue':
+    'ESCALATE immediately to the billing team — customer may be experiencing a fraudulent charge or unexpected service disruption.',
+  'Technical Problem':
+    'ESCALATE to on-call engineering — customer reports a critical outage or data loss.',
+  'General Inquiry':
+    'Prioritize response — customer has indicated urgency despite this being a general question.',
+  'Feature Request': 'Acknowledge urgency and log as high-priority product feedback.',
+  Unknown: 'ESCALATE for manual triage — high urgency but unclassified message.',
+}
+
+/**
+ * Maps a category/urgency pair to a recommended support action.
+ * @param category - Category of the message.
+ * @param urgency - Urgency level of the message.
+ * @returns Recommended support action string.
+ */
+export function getRecommendedAction(
+  category: Category | string,
+  urgency: Urgency | string
+): string {
+  if (urgency === 'High') {
+    return urgentOverrides[category] || urgentOverrides['Unknown']
+  }
+  return actionTemplates[category] || 'No recommendation available.'
+}
+
+/** @returns All category keys with a defined action template. */
+export function getAvailableCategories(): string[] {
+  return Object.keys(actionTemplates)
+}
+
+/**
+ * Determines whether a triaged message should be escalated to a senior agent.
+ * @param category - Category of the message.
+ * @param urgency - Urgency level of the message.
+ * @returns True if escalation is recommended.
+ */
+export function shouldEscalate(category: Category | string, urgency: Urgency | string): boolean {
+  if (urgency === 'High') return true
+  if (urgency === 'Medium' && category === 'Billing Issue') return true
+  return false
+}

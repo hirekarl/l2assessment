@@ -2,16 +2,16 @@
 f=$(jq -r '.tool_input.file_path // empty')
 
 case "$f" in
-  */src/*.js | */src/*.jsx) ;;
+  */src/*.js | */src/*.jsx | */src/*.ts | */src/*.tsx) ;;
   *) exit 0 ;;
 esac
 
 case "$f" in
-  *.test.js | *.test.jsx) exit 0 ;;
+  *.test.js | *.test.jsx | *.test.ts | *.test.tsx) exit 0 ;;
 esac
 
 case "$f" in
-  */src/test/* | */src/main.jsx) exit 0 ;;
+  */src/test/* | */src/main.jsx | */src/main.tsx) exit 0 ;;
 esac
 
 ext="${f##*.}"
