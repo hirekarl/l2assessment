@@ -1,6 +1,8 @@
 /**
  * High/Medium/Low urgency counts.
- * @param {{urgencyData: {High: number, Medium: number, Low: number}, total: number}} props
+ * @param {Object} props
+ * @param {Object} props.urgencyData - Counts keyed by "High", "Medium", "Low".
+ * @param {number} props.total
  */
 function UrgencyBreakdown({ urgencyData, total }) {
   return (

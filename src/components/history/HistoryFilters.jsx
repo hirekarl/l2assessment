@@ -1,12 +1,11 @@
 /**
  * Category filter chips plus the Clear All action.
- * @param {{
- *   history: object[],
- *   categories: string[],
- *   filter: string,
- *   onFilterChange: (category: string) => void,
- *   onClearAll: () => void
- * }} props
+ * @param {Object} props
+ * @param {Object[]} props.history
+ * @param {string[]} props.categories
+ * @param {string} props.filter
+ * @param {Function} props.onFilterChange
+ * @param {Function} props.onClearAll
  */
 function HistoryFilters({ history, categories, filter, onFilterChange, onClearAll }) {
   return (

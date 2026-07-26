@@ -3,7 +3,8 @@ import ReactMarkdown from 'react-markdown'
 /**
  * The full analysis-results card: source banner, escalation banner,
  * category/urgency/action/reasoning, and a copy-to-clipboard action.
- * @param {{results: object}} props
+ * @param {Object} props
+ * @param {Object} props.results
  */
 function ResultsPanel({ results }) {
   const copyResults = () => {

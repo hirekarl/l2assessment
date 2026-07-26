@@ -41,8 +41,8 @@ function classifyMockReason(error) {
 /**
  * Vercel serverless function: POST { message } -> triage classification.
  * Holds the Groq API key server-side so it is never exposed to the browser.
- * @param {import('http').IncomingMessage} req
- * @param {import('http').ServerResponse} res
+ * @param {Object} req - Node's IncomingMessage; parsed body at req.body.
+ * @param {Object} res - Node's ServerResponse (Vercel adds .status()/.json() helpers).
  */
 export default async function handler(req, res) {
   if (req.method !== 'POST') {

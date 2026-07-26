@@ -41,7 +41,7 @@ export const VALID_URGENCIES = ['High', 'Medium', 'Low']
  * Keyword-based categorization used whenever the real LLM is unavailable
  * (missing/invalid API key, rate limit, network failure, or backend outage).
  * @param {string} message - The raw customer message text.
- * @returns {{category: string, urgency: string, reasoning: string}}
+ * @returns {Object} { category, urgency, reasoning }
  */
 export function getMockCategorization(message) {
   const lower = message.toLowerCase()

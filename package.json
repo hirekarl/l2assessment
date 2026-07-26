@@ -18,6 +18,7 @@
     "test:e2e": "playwright test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "docs": "jsdoc -c jsdoc.json",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -59,6 +60,7 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
     "husky": "^9.1.7",
+    "jsdoc": "^4.0.5",
     "jsdom": "^29.1.1",
     "lint-staged": "^17.2.0",
     "markdownlint-cli2": "^0.23.1",

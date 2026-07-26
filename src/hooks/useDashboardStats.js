@@ -3,7 +3,7 @@ import { useTriageHistory } from './useTriageHistory'
 /**
  * Derives dashboard summary stats, category distribution, and urgency
  * breakdown from triage history.
- * @returns {{stats: object, categoryData: {name: string, count: number}[], urgencyData: {High: number, Medium: number, Low: number}}}
+ * @returns {Object} { stats, categoryData, urgencyData }
  */
 export function useDashboardStats() {
   const { history } = useTriageHistory()

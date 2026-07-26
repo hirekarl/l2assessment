@@ -9,7 +9,7 @@ function readHistory() {
 /**
  * Single source of truth for reading, appending to, and clearing the
  * triage history persisted in localStorage.
- * @returns {{history: object[], appendEntry: (entry: object) => void, clearHistory: () => void}}
+ * @returns {Object} { history, appendEntry, clearHistory }
  */
 export function useTriageHistory() {
   const [history, setHistory] = useState(readHistory)

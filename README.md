@@ -67,6 +67,7 @@ frontend — the AI endpoint needs `vercel dev`, which `dev:full` runs.)
 | `npm test`              | Vitest unit/component suite                               |
 | `npm run test:coverage` | Vitest with coverage report                               |
 | `npm run test:e2e`      | Playwright E2E + accessibility suite                      |
+| `npm run docs`          | Generate the JSDoc API docs site into `docs/api`          |
 
 ## How It Works
 
@@ -159,6 +160,7 @@ A related bug found while building this: the Groq client was constructed at modu
 - Dependabot for npm and GitHub Actions.
 - Prettier + markdownlint, wired into a Husky pre-commit hook via lint-staged.
 - `engines` field pinning the Node version Vite 7 requires.
+- JSDoc comments on every hook, component, page, and utility module, plus `npm run docs` to generate a browsable static HTML API reference (`docs/api`, gitignored/regenerated locally — not a Sphinx setup, since this is a pure JS/React codebase and Sphinx doesn't parse JSDoc natively).
 
 ## Security Note
 

@@ -1,12 +1,11 @@
 /**
  * Message textarea plus the Analyze/Clear action buttons.
- * @param {{
- *   message: string,
- *   onMessageChange: (value: string) => void,
- *   onAnalyze: () => void,
- *   onClear: () => void,
- *   isLoading: boolean
- * }} props
+ * @param {Object} props
+ * @param {string} props.message
+ * @param {Function} props.onMessageChange
+ * @param {Function} props.onAnalyze
+ * @param {Function} props.onClear
+ * @param {boolean} props.isLoading
  */
 function MessageForm({ message, onMessageChange, onAnalyze, onClear, isLoading }) {
   return (

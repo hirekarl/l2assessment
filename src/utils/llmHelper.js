@@ -5,7 +5,7 @@ import { getMockCategorization } from '../../shared/categorization.js'
  * which holds the Groq API key server-side. Falls back to local keyword-based
  * mock categorization if the backend itself is unreachable.
  * @param {string} message - The raw customer message text.
- * @returns {Promise<{category: string, urgency: string, reasoning: string, source: 'llm'|'mock', mockReason?: string}>}
+ * @returns {Promise<Object>} { category, urgency, reasoning, source: 'llm'|'mock', mockReason? }
  */
 export async function categorizeMessage(message) {
   try {

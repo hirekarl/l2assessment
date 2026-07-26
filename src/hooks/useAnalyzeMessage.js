@@ -7,7 +7,7 @@ import { useTriageHistory } from './useTriageHistory'
  * Encapsulates the analyze-message flow: calling the categorization
  * provider, deriving the recommended action/escalation, and persisting
  * the result to history.
- * @returns {{results: object|null, isLoading: boolean, analyze: (message: string) => Promise<void>, reset: () => void}}
+ * @returns {Object} { results, isLoading, analyze, reset }
  */
 export function useAnalyzeMessage() {
   const [results, setResults] = useState(null)

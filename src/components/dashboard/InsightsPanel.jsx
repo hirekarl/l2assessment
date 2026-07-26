@@ -1,6 +1,7 @@
 /**
  * Conditional callouts derived from the current stats snapshot.
- * @param {{stats: {total: number, today: number, highUrgencyPercent: number, fallbackCount: number}}} props
+ * @param {Object} props
+ * @param {Object} props.stats - { total, today, highUrgencyPercent, fallbackCount }
  */
 function InsightsPanel({ stats }) {
   return (

@@ -1,6 +1,7 @@
 /**
  * The four top-line summary stat cards on the Dashboard.
- * @param {{stats: {total: number, today: number, highUrgencyPercent: number, avgPerDay: number}}} props
+ * @param {Object} props
+ * @param {Object} props.stats - { total, today, highUrgencyPercent, avgPerDay }
  */
 function StatsCards({ stats }) {
   return (

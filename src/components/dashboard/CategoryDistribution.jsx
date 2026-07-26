@@ -1,6 +1,8 @@
 /**
  * Bar-per-category breakdown of triage volume.
- * @param {{categoryData: {name: string, count: number}[], total: number}} props
+ * @param {Object} props
+ * @param {Object[]} props.categoryData - Array of { name, count }.
+ * @param {number} props.total
  */
 function CategoryDistribution({ categoryData, total }) {
   return (

@@ -2,7 +2,10 @@ import ReactMarkdown from 'react-markdown'
 
 /**
  * A single collapsible history entry.
- * @param {{item: object, isExpanded: boolean, onToggle: () => void}} props
+ * @param {Object} props
+ * @param {Object} props.item
+ * @param {boolean} props.isExpanded
+ * @param {Function} props.onToggle
  */
 function HistoryItem({ item, isExpanded, onToggle }) {
   return (
