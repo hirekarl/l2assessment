@@ -1,0 +1,8 @@
+ai_trailer=$(grep -iE '^Co-Authored-By:.*(claude|anthropic|copilot|chatgpt|openai|codex|gemini|bard|cursor|windsurf|codeium|tabnine|devin|replit ai|amazon q|sourcegraph cody)' "$1" || true)
+
+if [ -n "$ai_trailer" ]; then
+  echo "error: commit message contains an AI co-author trailer:" >&2
+  echo "  $ai_trailer" >&2
+  echo "Remove it before committing." >&2
+  exit 1
+fi
