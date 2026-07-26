@@ -4,7 +4,7 @@
     "MD013": false,
     "MD024": { "siblings_only": true },
     "MD033": false,
-    "MD041": false
+    "MD041": false,
   },
-  "ignores": ["node_modules", "dist", "coverage", "playwright-report"]
+  "ignores": ["node_modules", "dist", "coverage", "playwright-report"],
 }
