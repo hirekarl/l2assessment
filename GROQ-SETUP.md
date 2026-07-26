@@ -36,15 +36,18 @@ Once logged in:
 3. Add your key:
 
 ```
-VITE_GROQ_API_KEY=gsk_your-actual-key-here
+GROQ_API_KEY=gsk_your-actual-key-here
 ```
 
 4. Save the file
-5. Restart the dev server:
+5. Run the full stack (frontend + the `/api/categorize` serverless function) with:
 
 ```bash
-npm run dev
+npm run dev:full
 ```
+
+(`npm run dev` alone only starts the Vite frontend — the AI categorization
+endpoint requires `vercel dev`, which also serves `api/categorize.js` locally.)
 
 ### 4. Test It Out
 

@@ -7,16 +7,18 @@ An AI-powered triage tool that classifies incoming customer support messages, as
 ## Tech Stack
 
 - **Frontend**: React + Vite + Tailwind CSS
+- **Backend**: Vercel serverless function (`api/categorize.js`)
 - **AI**: Groq API (Llama 3.3 70B)
-- **Runtime**: Browser-based (local development only)
+- **Deployment**: Vercel
 
 ## Setup
 
 ### Prerequisites
 
-- Node.js v16+
-- npm or yarn
+- Node.js v20+
+- npm
 - A free Groq API key from [console.groq.com](https://console.groq.com)
+- [Vercel CLI](https://vercel.com/docs/cli) (`npm i -g vercel`, or use `npx vercel`)
 
 ### Installation
 
@@ -29,16 +31,17 @@ npm install
 Create `.env.local` in the project root:
 
 ```
-VITE_GROQ_API_KEY=gsk_your-actual-key-here
+GROQ_API_KEY=gsk_your-actual-key-here
 ```
 
-Start the dev server:
+Run the full stack (frontend + the `/api/categorize` serverless function):
 
 ```bash
-npm run dev
+npm run dev:full
 ```
 
-App runs at `http://localhost:5173`.
+App runs at `http://localhost:3000`. (`npm run dev` alone starts only the Vite
+frontend — the AI endpoint needs `vercel dev`, which `dev:full` runs.)
 
 ## How It Works
 
@@ -98,7 +101,7 @@ The original codebase had several bugs that made the triage output unreliable. B
 
 ## Security Note
 
-This app exposes the Groq API key in the browser via `dangerouslyAllowBrowser: true`. This is acceptable for local development only. In production, API calls must be proxied through a backend server so the key is never shipped to the client.
+Groq calls are made server-side, from a Vercel serverless function (`api/categorize.js`). `GROQ_API_KEY` is read from the server environment only and is never bundled into the browser build — the frontend calls `/api/categorize` and never sees the key.
 
 ## License
 
