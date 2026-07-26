@@ -10,8 +10,10 @@ import ReactMarkdown from 'react-markdown'
 function HistoryItem({ item, isExpanded, onToggle }) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
-      <div
-        className="p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700"
+      <button
+        type="button"
+        aria-expanded={isExpanded}
+        className="w-full text-left p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700"
         onClick={onToggle}
       >
         <div className="flex items-start justify-between">
@@ -55,7 +57,7 @@ function HistoryItem({ item, isExpanded, onToggle }) {
           </div>
           <div className="text-gray-400 dark:text-gray-500 ml-4">{isExpanded ? '▲' : '▼'}</div>
         </div>
-      </div>
+      </button>
 
       {isExpanded && (
         <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-900">

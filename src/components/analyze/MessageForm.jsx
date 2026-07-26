@@ -18,10 +18,14 @@ function MessageForm({ message, onMessageChange, onAnalyze, onClear, isLoading }
       </p>
 
       <div className="mb-4">
-        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+        <label
+          htmlFor="customer-message"
+          className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
+        >
           Customer Message
         </label>
         <textarea
+          id="customer-message"
           value={message}
           onChange={(e) => onMessageChange(e.target.value)}
           placeholder="Paste customer message here..."
