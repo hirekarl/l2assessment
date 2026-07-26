@@ -7,6 +7,22 @@ This project does not follow semantic version tags (it's a continuously
 deployed single application, not a versioned package) — entries are grouped
 by work session instead.
 
+## 2026-07-26 — React TypeScript & TypeDoc Migration
+
+### Added
+
+- `tsconfig.json` configuring TypeScript (ES2022 target, bundler module resolution, `react-jsx`, strict checking).
+- `typedoc.json` configuring TypeDoc entry points and static HTML documentation generation into `docs/api`.
+- `src/types/triage.ts` declaring core domain models (`Category`, `Urgency`, `SourceType`, `MockReason`, `CategorizationResult`, `TriageResult`, `TriageHistoryItem`, `DashboardStats`).
+- `"typecheck"` script (`tsc --noEmit`) to validate type safety.
+
+### Changed
+
+- Refactored entire React SPA (`src/`), shared logic ([shared/categorization.ts](file:///D:/dev/pursuit/l2/l2assessment/shared/categorization.ts)), and Vercel serverless API route ([api/categorize.ts](file:///D:/dev/pursuit/l2/l2assessment/api/categorize.ts)) from JavaScript (`.js`/`.jsx`) to React TypeScript (`.ts`/`.tsx`).
+- Migrated documentation generation from `jsdoc` to **TypeDoc** (`npm run docs`), preserving existing JSDoc comment blocks.
+- Integrated `typescript-eslint` flat configs into [eslint.config.js](file:///D:/dev/pursuit/l2/l2assessment/eslint.config.js).
+- Updated Claude Code hooks ([.claude/hooks/format-js.sh](file:///D:/dev/pursuit/l2/l2assessment/.claude/hooks/format-js.sh), [.claude/hooks/missing-test-file.sh](file:///D:/dev/pursuit/l2/l2assessment/.claude/hooks/missing-test-file.sh), [.claude/hooks/stop-gate.sh](file:///D:/dev/pursuit/l2/l2assessment/.claude/hooks/stop-gate.sh)) to support `.ts`/`.tsx` files and include `typecheck` in turn completion gates.
+
 ## 2026-07-26 — Repo Hygiene & Claude Code Tooling
 
 ### Added

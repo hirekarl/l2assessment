@@ -18,6 +18,7 @@ installation, and how to run the app locally (`npm run dev:full`).
 3. Before opening a PR, run:
 
    ```bash
+   npm run typecheck
    npm run lint
    npm run format:check
    npm test
@@ -25,30 +26,30 @@ installation, and how to run the app locally (`npm run dev:full`).
    ```
 
    A Husky pre-commit hook already runs `lint-staged` (ESLint + Prettier on
-   staged JS/JSX, Prettier on JSON/CSS, markdownlint + Prettier on Markdown)
+   staged TS/TSX/JS/JSX, Prettier on JSON/CSS, markdownlint + Prettier on Markdown)
    automatically on `git commit`, so most formatting/lint issues are caught
    before you even open a PR. A `commit-msg` hook also runs, rejecting any
    commit whose message contains a `Co-Authored-By` trailer naming an AI
    coding assistant (see [Commit Messages](#commit-messages) below).
 
-4. Open a PR against `main`. CI runs lint, the full test suite with coverage,
-   a production build, and the Playwright E2E + accessibility suite — all
-   must pass before merge.
+4. Open a PR against `main`. CI runs type checking, linting, the full test suite
+   with coverage, a production build, and the Playwright E2E + accessibility suite —
+   all must pass before merge.
 
 ## Using Claude Code on This Repo
 
 `.claude/settings.json` and `.claude/hooks/` (see also `CLAUDE.md`) wire up
 Claude Code-specific automation on top of the git hooks above:
 
-- JS/JSX and Markdown files are auto-formatted immediately after Claude
+- TS/TSX/JS/JSX and Markdown files are auto-formatted immediately after Claude
   writes or edits them (the same eslint/markdownlint + prettier pipeline as
   `lint-staged`), not just at commit time.
-- A `Stop` hook runs `lint` + `test:coverage` before Claude can end a turn
+- A `Stop` hook runs `typecheck` + `lint` + `test:coverage` before Claude can end a turn
   in which `src`/`shared`/`api` changed, and blocks with the failure output
-  if either fails.
+  if any fail.
 - `git push --force` (without `--force-with-lease`) and `git reset --hard`
   require explicit confirmation.
-- Writing a new `src/**/*.{js,jsx}` file without a sibling `*.test.*` file
+- Writing a new `src/**/*.{ts,tsx,js,jsx}` file without a sibling `*.test.*` file
   triggers a reminder, given the 100% coverage requirement above.
 
 These only affect Claude Code sessions — they don't change the human
@@ -66,6 +67,7 @@ Common types used here: `feat`, `fix`, `docs`, `test`, `refactor`, `style`,
 `ci`, `chore`. Examples from the project history:
 
 ```text
+refactor: migrate React frontend, shared modules, and API to TypeScript
 fix: migrate from react-router-dom to react-router v8
 feat(theme): add light/dark mode toggle
 test: add Vitest + RTL suite at 100% coverage

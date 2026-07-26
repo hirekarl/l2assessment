@@ -18,11 +18,12 @@ An AI-powered triage tool that classifies incoming customer support messages, as
 
 ## Tech Stack
 
-- **Frontend**: React + Vite + Tailwind CSS
-- **Backend**: Vercel serverless function (`api/categorize.js`)
+- **Frontend**: React 19 + TypeScript + Vite + Tailwind CSS
+- **Backend**: Vercel serverless function (`api/categorize.ts`)
 - **AI**: Groq API (Llama 3.3 70B)
 - **Deployment**: Vercel
 - **Testing**: Vitest + React Testing Library (unit/component, 100% coverage), Playwright + axe-core (E2E + accessibility)
+- **Documentation**: TypeDoc (JSDoc comments → static HTML in `docs/api`)
 
 ## Setup
 
@@ -62,15 +63,16 @@ frontend — the AI endpoint needs `vercel dev`, which `dev:full` runs.)
 | ----------------------- | --------------------------------------------------------- |
 | `npm run dev`           | Vite frontend only (no `/api` route; falls back to mock)  |
 | `npm run dev:full`      | Frontend + `/api/categorize` via `vercel dev`             |
+| `npm run typecheck`     | TypeScript type checking (`tsc --noEmit`)                 |
 | `npm run build`         | Production build                                          |
 | `npm run preview`       | Preview the production build                              |
-| `npm run lint`          | ESLint                                                    |
+| `npm run lint`          | ESLint (`@typescript-eslint` flat config)                 |
 | `npm run format`        | Prettier, write mode                                      |
 | `npm run format:check`  | Prettier, check mode (used in CI via lint-staged locally) |
 | `npm test`              | Vitest unit/component suite                               |
-| `npm run test:coverage` | Vitest with coverage report                               |
+| `npm run test:coverage` | Vitest with coverage report (100% threshold)              |
 | `npm run test:e2e`      | Playwright E2E + accessibility suite                      |
-| `npm run docs`          | Generate the JSDoc API docs site into `docs/api`          |
+| `npm run docs`          | Generate TypeDoc API documentation into `docs/api`        |
 
 ## How It Works
 
@@ -100,29 +102,51 @@ Results are saved to `localStorage` and viewable in the History tab, sorted newe
 
 High-urgency messages trigger an escalation banner and receive urgency-specific routing instructions instead of the standard template.
 
+## Improvements Made (TypeScript & TypeDoc Refactor)
+
+The application has been fully refactored to **React TypeScript** to improve maintainability, developer ergonomics, and type safety across the domain model.
+
+### 1. Strongly Typed Domain Architecture (`src/types/triage.ts`)
+
+- Centralized domain interfaces (`Category`, `Urgency`, `SourceType`, `MockReason`, `CategorizationResult`, `TriageResult`, `TriageHistoryItem`, `DashboardStats`) to enforce strict type contracts across custom hooks, components, pages, and API handlers.
+
+### 2. Full React TypeScript Migration
+
+- Converted all frontend components, hooks, contexts, pages, shared utilities, and the Vercel serverless API route (`api/categorize.ts`) from JavaScript (`.js`/`.jsx`) to TypeScript (`.ts`/`.tsx`).
+- Integrated `typescript-eslint` flat configuration into ESLint for linting `.ts` and `.tsx` files.
+
+### 3. TypeDoc Documentation Generation (`npm run docs`)
+
+- Transitioned documentation generation from `jsdoc` to **TypeDoc** (`typedoc.json`).
+- All existing JSDoc comment blocks (`@param`, `@returns`, `@description`) on functions and components are natively extracted alongside TypeScript signatures into browsable static HTML documentation in `docs/api`.
+
+### 4. Updated Claude Code Automation Hooks
+
+- Extended `.claude/hooks/format-js.sh`, `.claude/hooks/missing-test-file.sh`, and `.claude/hooks/stop-gate.sh` to support `.ts`/`.tsx` files and automatically run `npm run typecheck` before turn completion.
+
 ## Improvements Made (Week 2 Assessment)
 
 The original codebase had several bugs that made the triage output unreliable. Below is a summary of what was found and fixed.
 
-### 1. LLM integration was fragile (`llmHelper.js`)
+### 1. LLM integration was fragile (`llmHelper.ts`)
 
 **Before:** No system prompt. The model responded in free text and the app extracted a category by scanning the response for words like "billing" or "technical". Temperature was 0.7, making results inconsistent. Urgency was not assessed by the LLM at all.
 
 **After:** A system prompt defines the four categories, urgency rules, and required JSON output format. The model returns `{ category, urgency, reasoning }` in a single call. Temperature lowered to 0.2. JSON is validated against the allowed value sets before use.
 
-### 2. Urgency scorer had inverted logic (`urgencyScorer.js`)
+### 2. Urgency scorer had inverted logic (`urgencyScorer.ts`)
 
 **Before:** A rule-based heuristic scored messages on a 0–100 scale. ALL CAPS _decreased_ urgency by 50 points. Off-hours and weekends also _decreased_ urgency. Polite language like "please" deducted 15 points per word. A message like "PLEASE FIX THIS IMMEDIATELY" would score Low.
 
-**After:** Urgency is assessed by the LLM using the context of the full message. The heuristic scorer is no longer used. `urgencyScorer.js` remains in the repo (with test coverage documenting its buggy behavior) but is not imported.
+**After:** Urgency is assessed by the LLM using the context of the full message. The heuristic scorer is no longer used. `urgencyScorer.ts` remains in the repo (with test coverage documenting its buggy behavior) but is not imported.
 
-### 3. Templates had a copy-paste bug and dead logic (`templates.js`)
+### 3. Templates had a copy-paste bug and dead logic (`templates.ts`)
 
 **Before:** `"Feature Request"` was mapped to `"Ask user to check billing portal."` — an exact copy of the Billing Issue action. `shouldEscalate()` ignored its `category` and `urgency` parameters and returned `true` for any message over 100 characters. `getRecommendedAction()` accepted an `urgency` argument but never used it.
 
 **After:** Each category has a correct, distinct recommended action. High-urgency messages receive escalation-specific overrides. `shouldEscalate()` returns `true` for High urgency, or Medium urgency on a Billing Issue. `getRecommendedAction()` uses urgency to select the right action.
 
-### 4. History sorted alphabetically by message text (`HistoryPage.jsx`)
+### 4. History sorted alphabetically by message text (`HistoryPage.tsx`)
 
 **Before:** `history.sort((a, b) => a.message.localeCompare(b.message))` — sorted A–Z by message content.
 
@@ -144,7 +168,7 @@ A related bug found while building this: the Groq client was constructed at modu
 
 **Problem:** The Groq API key was shipped to the browser via `dangerouslyAllowBrowser: true`, exposing it to anyone who opened DevTools.
 
-**Fix:** Groq calls moved to a Vercel serverless function (`api/categorize.js`). The key is read from a server-only `GROQ_API_KEY` env var (not `VITE_`-prefixed) and never bundled into the client. The frontend's `llmHelper.js` now calls `/api/categorize` and only falls back to a local mock if that endpoint itself is unreachable.
+**Fix:** Groq calls moved to a Vercel serverless function (`api/categorize.ts`). The key is read from a server-only `GROQ_API_KEY` env var (not `VITE_`-prefixed) and never bundled into the client. The frontend's `llmHelper.ts` now calls `/api/categorize` and only falls back to a local mock if that endpoint itself is unreachable.
 
 ### 3. No automated tests
 
@@ -163,7 +187,7 @@ A related bug found while building this: the Groq client was constructed at modu
 - Dependabot for npm and GitHub Actions.
 - Prettier + markdownlint, wired into a Husky pre-commit hook via lint-staged.
 - `engines` field pinning the Node version Vite requires.
-- JSDoc comments on every hook, component, page, and utility module, plus `npm run docs` to generate a browsable static HTML API reference (`docs/api`, gitignored/regenerated locally — not a Sphinx setup, since this is a pure JS/React codebase and Sphinx doesn't parse JSDoc natively).
+- TypeDoc static HTML API documentation (`docs/api`).
 
 ## Dependency & Security Maintenance
 
@@ -185,7 +209,7 @@ A pass through the open Dependabot backlog, prompted by five open PRs (four GitH
 
 ## Security Note
 
-Groq calls are made server-side, from a Vercel serverless function (`api/categorize.js`). `GROQ_API_KEY` is read from the server environment only and is never bundled into the browser build — the frontend calls `/api/categorize` and never sees the key.
+Groq calls are made server-side, from a Vercel serverless function (`api/categorize.ts`). `GROQ_API_KEY` is read from the server environment only and is never bundled into the browser build — the frontend calls `/api/categorize` and never sees the key.
 
 To report a vulnerability, see [SECURITY.md](SECURITY.md).
 

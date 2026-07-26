@@ -1,15 +1,16 @@
 # CLAUDE.md
 
-Customer Inbox Triage — React 19 + Vite SPA with a Vercel serverless function
-(`api/categorize.js`) calling Groq (Llama 3.3 70B) to classify support
+Customer Inbox Triage — React 19 + TypeScript + Vite SPA with a Vercel serverless function
+(`api/categorize.ts`) calling Groq (Llama 3.3 70B) to classify support
 messages. See README.md for the full architecture and feature writeup.
 
 ## Commands
 
 - `npm run dev:full` — frontend + `/api/categorize` via `vercel dev` (needs `GROQ_API_KEY` in `.env.local`). Plain `npm run dev` skips the API route and falls back to a local mock.
+- `npm run typecheck` — TypeScript type checking (`tsc --noEmit`)
 - `npm run lint` / `npm run format` / `npm run format:check`
 - `npm test` / `npm run test:coverage` / `npm run test:e2e`
-- `npm run build` / `npm run docs` (JSDoc → `docs/api`, gitignored)
+- `npm run build` / `npm run docs` (TypeDoc → `docs/api`, gitignored)
 
 ## Hard requirements
 
