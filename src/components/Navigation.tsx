@@ -11,57 +11,70 @@ function Navigation() {
   }
 
   return (
-    <nav className="bg-blue-600 dark:bg-blue-800 text-white shadow-md">
+    <nav className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 text-white shadow-lg border-b border-blue-500/20 dark:border-gray-700/50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 hover:opacity-80">
-            <div className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-2xl">
+          <Link
+            to="/"
+            className="flex items-center space-x-3 group hover:opacity-95 transition-opacity"
+          >
+            <div className="bg-white/95 dark:bg-gray-800 rounded-xl w-10 h-10 flex items-center justify-center text-xl shadow-md group-hover:scale-105 transition-transform">
               📧
             </div>
             <div>
-              <div className="font-bold text-lg">Relay AI</div>
-              <div className="text-xs text-white">Customer Triage</div>
+              <div className="font-extrabold text-lg tracking-tight text-white">Relay AI</div>
+              <div className="text-[11px] text-blue-100 dark:text-gray-400 font-medium">
+                Customer Triage
+              </div>
             </div>
           </Link>
 
           {/* Navigation Links */}
-          <div className="flex items-center space-x-1">
+          <div className="flex items-center space-x-1 sm:space-x-2">
             <button
               onClick={toggleTheme}
               aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-              className="px-3 py-2 rounded hover:bg-blue-500 dark:hover:bg-blue-700 text-lg"
+              className="px-3 py-2 rounded-lg hover:bg-white/10 dark:hover:bg-gray-700/50 text-lg transition-colors"
             >
               {theme === 'dark' ? '☀️' : '🌙'}
             </button>
             <Link
               to="/"
-              className={`px-4 py-2 rounded ${
-                isActive('/') ? 'bg-blue-700 font-semibold' : 'hover:bg-blue-500'
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                isActive('/')
+                  ? 'bg-blue-700 font-semibold text-white shadow-inner'
+                  : 'hover:bg-white/10 dark:hover:bg-gray-700/50 text-blue-50 dark:text-gray-300'
               }`}
             >
               Home
             </Link>
             <Link
               to="/analyze"
-              className={`px-4 py-2 rounded ${
-                isActive('/analyze') ? 'bg-blue-700 font-semibold' : 'hover:bg-blue-500'
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                isActive('/analyze')
+                  ? 'bg-blue-700 font-semibold text-white shadow-inner'
+                  : 'hover:bg-white/10 dark:hover:bg-gray-700/50 text-blue-50 dark:text-gray-300'
               }`}
             >
               Analyze
             </Link>
             <Link
               to="/history"
-              className={`px-4 py-2 rounded ${
-                isActive('/history') ? 'bg-blue-700 font-semibold' : 'hover:bg-blue-500'
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                isActive('/history')
+                  ? 'bg-blue-700 font-semibold text-white shadow-inner'
+                  : 'hover:bg-white/10 dark:hover:bg-gray-700/50 text-blue-50 dark:text-gray-300'
               }`}
             >
               History
             </Link>
             <Link
               to="/dashboard"
-              className={`px-4 py-2 rounded ${
-                isActive('/dashboard') ? 'bg-blue-700 font-semibold' : 'hover:bg-blue-500'
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                isActive('/dashboard')
+                  ? 'bg-blue-700 font-semibold text-white shadow-inner'
+                  : 'hover:bg-white/10 dark:hover:bg-gray-700/50 text-blue-50 dark:text-gray-300'
               }`}
             >
               Dashboard

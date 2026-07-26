@@ -17,42 +17,44 @@ function MessageForm({
   isLoading,
 }: MessageFormProps) {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200/80 dark:border-gray-700/80 p-6 mb-6">
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1.5 tracking-tight">
         Analyze Customer Message
       </h1>
-      <p className="text-gray-600 dark:text-gray-300 mb-6">
+      <p className="text-gray-600 dark:text-gray-300 mb-6 font-medium">
         Paste a customer support message below to automatically categorize and prioritize.
       </p>
 
       <div className="mb-4">
-        <label
-          htmlFor="customer-message"
-          className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2"
-        >
-          Customer Message
-        </label>
+        <div className="flex items-center justify-between mb-2">
+          <label
+            htmlFor="customer-message"
+            className="block text-sm font-semibold text-gray-700 dark:text-gray-300"
+          >
+            Customer Message
+          </label>
+          <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
+            {message.length} characters
+          </span>
+        </div>
         <textarea
           id="customer-message"
           value={message}
           onChange={(e) => onMessageChange(e.target.value)}
           placeholder="Paste customer message here..."
-          className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-lg p-3 h-40 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 rounded-xl p-4 h-40 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all"
           disabled={isLoading}
         />
-        <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-          {message.length} characters
-        </div>
       </div>
 
       <div className="flex space-x-3">
         <button
           onClick={onAnalyze}
           disabled={isLoading}
-          className={`flex-1 py-3 rounded-lg font-semibold ${
+          className={`flex-1 py-3 rounded-xl font-bold transition-all duration-200 shadow-sm active:scale-98 cursor-pointer ${
             isLoading
               ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-              : 'bg-blue-600 text-white hover:bg-blue-700'
+              : 'bg-blue-600 hover:bg-blue-700 text-white hover:shadow-md'
           }`}
         >
           {isLoading ? (
@@ -82,7 +84,7 @@ function MessageForm({
         <button
           onClick={onClear}
           disabled={isLoading}
-          className="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+          className="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-xl font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer"
         >
           Clear
         </button>

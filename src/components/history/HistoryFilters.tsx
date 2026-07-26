@@ -19,16 +19,20 @@ function HistoryFilters({
   onClearAll,
 }: HistoryFiltersProps) {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200/80 dark:border-gray-700/80 p-6 mb-6">
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Analysis History</h1>
-          <p className="text-gray-600 dark:text-gray-300">View and manage past message analyses</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+            Analysis History
+          </h1>
+          <p className="text-gray-600 dark:text-gray-300 font-medium">
+            View and manage past message analyses
+          </p>
         </div>
         {history.length > 0 && (
           <button
             onClick={onClearAll}
-            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 font-semibold"
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold shadow-sm transition-all cursor-pointer"
           >
             Clear All
           </button>
@@ -39,9 +43,9 @@ function HistoryFilters({
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => onFilterChange('all')}
-            className={`px-4 py-2 rounded-lg font-semibold ${
+            className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
               filter === 'all'
-                ? 'bg-blue-600 text-white'
+                ? 'bg-blue-600 text-white shadow-md'
                 : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
@@ -51,9 +55,9 @@ function HistoryFilters({
             <button
               key={category}
               onClick={() => onFilterChange(category)}
-              className={`px-4 py-2 rounded-lg font-semibold ${
+              className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all cursor-pointer ${
                 filter === category
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-blue-600 text-white shadow-md'
                   : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
               }`}
             >
