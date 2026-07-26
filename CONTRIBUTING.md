@@ -27,7 +27,9 @@ installation, and how to run the app locally (`npm run dev:full`).
    A Husky pre-commit hook already runs `lint-staged` (ESLint + Prettier on
    staged JS/JSX, Prettier on JSON/CSS, markdownlint + Prettier on Markdown)
    automatically on `git commit`, so most formatting/lint issues are caught
-   before you even open a PR.
+   before you even open a PR. A `commit-msg` hook also runs, rejecting any
+   commit whose message contains a `Co-Authored-By` trailer naming an AI
+   coding assistant (see [Commit Messages](#commit-messages) below).
 
 4. Open a PR against `main`. CI runs lint, the full test suite with coverage,
    a production build, and the Playwright E2E + accessibility suite — all
@@ -49,6 +51,10 @@ fix: migrate from react-router-dom to react-router v8
 feat(theme): add light/dark mode toggle
 test: add Vitest + RTL suite at 100% coverage
 ```
+
+Commits should not carry a `Co-Authored-By` trailer for an AI coding
+assistant (Claude, Copilot, ChatGPT, etc.) — a `commit-msg` hook
+(`.husky/commit-msg`) rejects these automatically.
 
 ## Reporting Bugs or Security Issues
 
