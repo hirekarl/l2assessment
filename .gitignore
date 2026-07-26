@@ -30,3 +30,4 @@ playwright-report
 blob-report
 playwright/.cache
 docs/api
+SESSION_TRANSCRIPT.md
