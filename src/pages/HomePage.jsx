@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useTriageHistory } from '../hooks/useTriageHistory'
 
+/** Landing page: summary stats, quick actions, and recent activity. */
 function HomePage() {
   const { history } = useTriageHistory()
   const today = new Date().toDateString()

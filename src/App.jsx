@@ -5,6 +5,7 @@ import AnalyzePage from './pages/AnalyzePage'
 import HistoryPage from './pages/HistoryPage'
 import DashboardPage from './pages/DashboardPage'
 
+/** Root component: router, nav shell, and the four top-level page routes. */
 function App() {
   return (
     <Router>

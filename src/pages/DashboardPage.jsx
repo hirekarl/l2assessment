@@ -4,6 +4,7 @@ import CategoryDistribution from '../components/dashboard/CategoryDistribution'
 import UrgencyBreakdown from '../components/dashboard/UrgencyBreakdown'
 import InsightsPanel from '../components/dashboard/InsightsPanel'
 
+/** Dashboard page: aggregate stats, category/urgency breakdowns, and derived insights. */
 function DashboardPage() {
   const { stats, categoryData, urgencyData } = useDashboardStats()
 

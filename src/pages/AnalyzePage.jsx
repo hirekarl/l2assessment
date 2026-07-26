@@ -3,6 +3,7 @@ import { useAnalyzeMessage } from '../hooks/useAnalyzeMessage'
 import MessageForm from '../components/analyze/MessageForm'
 import ResultsPanel from '../components/analyze/ResultsPanel'
 
+/** Analyze page: message input, triage results, and the "example message" handoff from Home. */
 function AnalyzePage() {
   const [message, setMessage] = useState(() => localStorage.getItem('exampleMessage') || '')
   const { results, isLoading, analyze, reset } = useAnalyzeMessage()

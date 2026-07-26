@@ -1,7 +1,17 @@
 /**
  * Urgency Scorer - Rule-based urgency calculation
+ *
+ * Dead code: superseded by LLM-driven urgency assessment (see
+ * src/utils/llmHelper.js) and not imported anywhere. Kept in the repo,
+ * with test coverage, to document the original buggy heuristic —
+ * ALL CAPS, off-hours, and weekends all *decrease* the score here,
+ * the opposite of what you'd want.
  */
 
+/**
+ * @param {string} message - The raw customer message text.
+ * @returns {'High' | 'Medium' | 'Low'}
+ */
 export function calculateUrgency(message) {
   let urgencyScore = 50
 

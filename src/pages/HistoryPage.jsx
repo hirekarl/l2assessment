@@ -3,6 +3,7 @@ import { useTriageHistory } from '../hooks/useTriageHistory'
 import HistoryFilters from '../components/history/HistoryFilters'
 import HistoryItem from '../components/history/HistoryItem'
 
+/** History page: filterable, sortable, expandable list of past triage results. */
 function HistoryPage() {
   const { history, clearHistory } = useTriageHistory()
   const [filter, setFilter] = useState('all')

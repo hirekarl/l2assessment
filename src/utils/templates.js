@@ -21,6 +21,12 @@ const urgentOverrides = {
   Unknown: 'ESCALATE for manual triage — high urgency but unclassified message.',
 }
 
+/**
+ * Maps a category/urgency pair to a recommended support action.
+ * @param {string} category
+ * @param {string} urgency
+ * @returns {string}
+ */
 export function getRecommendedAction(category, urgency) {
   if (urgency === 'High') {
     return urgentOverrides[category] || urgentOverrides['Unknown']
@@ -28,10 +34,17 @@ export function getRecommendedAction(category, urgency) {
   return actionTemplates[category] || 'No recommendation available.'
 }
 
+/** @returns {string[]} all category keys with a defined action template. */
 export function getAvailableCategories() {
   return Object.keys(actionTemplates)
 }
 
+/**
+ * Determines whether a triaged message should be escalated to a senior agent.
+ * @param {string} category
+ * @param {string} urgency
+ * @returns {boolean}
+ */
 export function shouldEscalate(category, urgency) {
   if (urgency === 'High') return true
   if (urgency === 'Medium' && category === 'Billing Issue') return true
