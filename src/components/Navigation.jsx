@@ -1,14 +1,16 @@
 import { Link, useLocation } from 'react-router-dom'
+import { useTheme } from '../contexts/useTheme.js'
 
 function Navigation() {
   const location = useLocation()
-  
+  const { theme, toggleTheme } = useTheme()
+
   const isActive = (path) => {
     return location.pathname === path
   }
 
   return (
-    <nav className="bg-blue-600 text-white shadow-md">
+    <nav className="bg-blue-600 dark:bg-blue-800 text-white shadow-md">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -23,7 +25,14 @@ function Navigation() {
           </Link>
 
           {/* Navigation Links */}
-          <div className="flex space-x-1">
+          <div className="flex items-center space-x-1">
+            <button
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              className="px-3 py-2 rounded hover:bg-blue-500 dark:hover:bg-blue-700 text-lg"
+            >
+              {theme === 'dark' ? '☀️' : '🌙'}
+            </button>
             <Link
               to="/"
               className={`px-4 py-2 rounded ${
