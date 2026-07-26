@@ -47,4 +47,16 @@ export default defineConfig([
       globals: { ...globals.browser, ...globals.node, ...globals.vitest },
     },
   },
+  {
+    files: ['e2e/**/*.js', 'playwright.config.js'],
+    extends: [js.configs.recommended],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      globals: globals.node,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+    },
+  },
 ])

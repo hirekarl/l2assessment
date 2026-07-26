@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "test": "cross-env NODE_OPTIONS=--no-experimental-webstorage vitest run",
     "test:watch": "cross-env NODE_OPTIONS=--no-experimental-webstorage vitest",
-    "test:coverage": "cross-env NODE_OPTIONS=--no-experimental-webstorage vitest run --coverage"
+    "test:coverage": "cross-env NODE_OPTIONS=--no-experimental-webstorage vitest run --coverage",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "groq-sdk": "^0.37.0",
@@ -21,7 +22,9 @@
     "react-router-dom": "^7.13.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
     "@eslint/js": "^9.39.1",
+    "@playwright/test": "^1.62.0",
     "@tailwindcss/typography": "^0.5.19",
     "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.3.2",
