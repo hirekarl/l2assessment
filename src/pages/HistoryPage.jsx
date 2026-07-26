@@ -1,19 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 
 function HistoryPage() {
-  const [history, setHistory] = useState([])
+  const [history, setHistory] = useState(() =>
+    JSON.parse(localStorage.getItem('triageHistory') || '[]')
+  )
   const [filter, setFilter] = useState('all')
   const [expandedIndex, setExpandedIndex] = useState(null)
-
-  useEffect(() => {
-    loadHistory()
-  }, [])
-
-  const loadHistory = () => {
-    const savedHistory = JSON.parse(localStorage.getItem('triageHistory') || '[]')
-    setHistory(savedHistory)
-  }
 
   const clearHistory = () => {
     if (window.confirm('Are you sure you want to clear all history?')) {
@@ -130,6 +123,14 @@ function HistoryPage() {
                       {item.escalate && (
                         <span className="text-xs bg-red-600 text-white px-3 py-1 rounded-full font-semibold">
                           Escalate
+                        </span>
+                      )}
+                      {item.source === 'mock' && (
+                        <span
+                          className="text-xs bg-amber-100 text-amber-800 px-3 py-1 rounded-full font-semibold"
+                          title={item.mockReason ? `Fallback: ${item.mockReason}` : 'Fallback mode'}
+                        >
+                          ⚠ Fallback
                         </span>
                       )}
                     </div>

@@ -1,51 +1,35 @@
-import { useState, useEffect } from 'react'
-
 function DashboardPage() {
-  const [stats, setStats] = useState({
-    total: 0,
-    today: 0,
-    highUrgencyPercent: 0,
-    avgPerDay: 0
-  })
-  const [categoryData, setCategoryData] = useState([])
-  const [urgencyData, setUrgencyData] = useState({ High: 0, Medium: 0, Low: 0 })
+  const history = JSON.parse(localStorage.getItem('triageHistory') || '[]')
+  const today = new Date().toDateString()
+  const todayMessages = history.filter(item =>
+    new Date(item.timestamp).toDateString() === today
+  )
 
-  useEffect(() => {
-    loadDashboardData()
-  }, [])
+  // Calculate stats
+  const highUrgency = history.filter(h => h.urgency === 'High').length
+  const totalDays = history.length > 0 ? 7 : 1
+  const fallbackCount = history.filter(item => item.source === 'mock').length
 
-  const loadDashboardData = () => {
-    const history = JSON.parse(localStorage.getItem('triageHistory') || '[]')
-    const today = new Date().toDateString()
-    const todayMessages = history.filter(item => 
-      new Date(item.timestamp).toDateString() === today
-    )
-
-    // Calculate stats
-    const highUrgency = history.filter(h => h.urgency === 'High').length
-    const totalDays = history.length > 0 ? 7 : 1
-    
-    setStats({
-      total: history.length,
-      today: todayMessages.length,
-      highUrgencyPercent: history.length > 0 ? Math.round((highUrgency / history.length) * 100) : 0,
-      avgPerDay: Math.round(history.length / totalDays)
-    })
-
-    // Category distribution
-    const categories = {}
-    history.forEach(item => {
-      categories[item.category] = (categories[item.category] || 0) + 1
-    })
-    setCategoryData(Object.entries(categories).map(([name, count]) => ({ name, count })))
-
-    // Urgency breakdown
-    const urgency = { High: 0, Medium: 0, Low: 0 }
-    history.forEach(item => {
-      urgency[item.urgency] = (urgency[item.urgency] || 0) + 1
-    })
-    setUrgencyData(urgency)
+  const stats = {
+    total: history.length,
+    today: todayMessages.length,
+    highUrgencyPercent: history.length > 0 ? Math.round((highUrgency / history.length) * 100) : 0,
+    avgPerDay: Math.round(history.length / totalDays),
+    fallbackCount
   }
+
+  // Category distribution
+  const categories = {}
+  history.forEach(item => {
+    categories[item.category] = (categories[item.category] || 0) + 1
+  })
+  const categoryData = Object.entries(categories).map(([name, count]) => ({ name, count }))
+
+  // Urgency breakdown
+  const urgencyData = { High: 0, Medium: 0, Low: 0 }
+  history.forEach(item => {
+    urgencyData[item.urgency] = (urgencyData[item.urgency] || 0) + 1
+  })
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -146,6 +130,9 @@ function DashboardPage() {
             )}
             {stats.today > 10 && (
               <p>📈 High activity today with {stats.today} messages analyzed</p>
+            )}
+            {stats.fallbackCount > 0 && (
+              <p>⚠️ {stats.fallbackCount} of {stats.total} triage{stats.total === 1 ? '' : 's'} ran in fallback mode (AI unavailable) — results may be less accurate</p>
             )}
             {stats.total === 0 && (
               <p>👋 Start by analyzing some messages to see insights here</p>

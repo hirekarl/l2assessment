@@ -27,9 +27,9 @@ function AnalyzePage() {
     setResults(null)
     
     try {
-      const { category, urgency, reasoning } = await categorizeMessage(message)
+      const { category, urgency, reasoning, source, mockReason } = await categorizeMessage(message)
       const recommendedAction = getRecommendedAction(category, urgency)
-      const escalate = shouldEscalate(category, urgency, message)
+      const escalate = shouldEscalate(category, urgency)
 
       const analysisResult = {
         message,
@@ -38,6 +38,8 @@ function AnalyzePage() {
         recommendedAction,
         escalate,
         reasoning,
+        source,
+        mockReason,
         timestamp: new Date().toISOString()
       }
 
@@ -123,7 +125,20 @@ function AnalyzePage() {
         {results && (
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-bold text-gray-900 mb-4">Analysis Results</h2>
-            
+
+            {results.source === 'mock' ? (
+              <div className="mb-4 bg-amber-50 border border-amber-300 rounded-lg px-4 py-3 flex items-center gap-2">
+                <span className="text-amber-700 font-bold text-sm">⚠ Fallback Mode</span>
+                <span className="text-amber-700 text-sm">
+                  AI unavailable ({results.mockReason}) — using basic keyword matching.
+                </span>
+              </div>
+            ) : (
+              <div className="mb-4 bg-green-50 border border-green-300 rounded-lg px-4 py-3 flex items-center gap-2">
+                <span className="text-green-700 font-bold text-sm">✓ AI-analyzed</span>
+              </div>
+            )}
+
             {results.escalate && (
               <div className="mb-4 bg-red-50 border border-red-300 rounded-lg px-4 py-3 flex items-center gap-2">
                 <span className="text-red-700 font-bold text-sm">⚠ ESCALATE</span>

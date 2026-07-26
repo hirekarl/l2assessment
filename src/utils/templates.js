@@ -25,7 +25,7 @@ export function getAvailableCategories() {
   return Object.keys(actionTemplates);
 }
 
-export function shouldEscalate(category, urgency, message) {
+export function shouldEscalate(category, urgency) {
   if (urgency === "High") return true;
   if (urgency === "Medium" && category === "Billing Issue") return true;
   return false;
