@@ -1,9 +1,32 @@
 import Groq from 'groq-sdk';
 
-const groq = new Groq({
-  apiKey: import.meta.env.VITE_GROQ_API_KEY,
-  dangerouslyAllowBrowser: true // Not recommended for production — API key should live server-side
-});
+class MissingApiKeyError extends Error {}
+
+let groqClient = null;
+
+function getGroqClient() {
+  const apiKey = import.meta.env.VITE_GROQ_API_KEY;
+  if (!apiKey) {
+    throw new MissingApiKeyError('VITE_GROQ_API_KEY is not set');
+  }
+  if (!groqClient) {
+    groqClient = new Groq({
+      apiKey,
+      dangerouslyAllowBrowser: true // Not recommended for production — API key should live server-side
+    });
+  }
+  return groqClient;
+}
+
+function classifyMockReason(error) {
+  if (error instanceof MissingApiKeyError) return 'Missing API key';
+  if (error instanceof Groq.AuthenticationError) return 'Invalid API key';
+  if (error instanceof Groq.RateLimitError) return 'Rate limit exceeded';
+  if (error instanceof Groq.APIConnectionError) return 'Network error';
+  if (error instanceof Groq.APIError) return 'AI service error';
+  if (error instanceof SyntaxError) return 'Invalid response format';
+  return 'Unknown error';
+}
 
 const SYSTEM_PROMPT = `You are a customer support triage assistant for Relay AI, a SaaS customer operations platform.
 
@@ -32,7 +55,8 @@ const VALID_URGENCIES = ["High", "Medium", "Low"];
 
 export async function categorizeMessage(message) {
   try {
-    const response = await groq.chat.completions.create({
+    const client = getGroqClient();
+    const response = await client.chat.completions.create({
       model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
@@ -47,11 +71,13 @@ export async function categorizeMessage(message) {
     return {
       category: VALID_CATEGORIES.includes(parsed.category) ? parsed.category : "General Inquiry",
       urgency: VALID_URGENCIES.includes(parsed.urgency) ? parsed.urgency : "Medium",
-      reasoning: parsed.reasoning || "No reasoning provided."
+      reasoning: parsed.reasoning || "No reasoning provided.",
+      source: "llm"
     };
   } catch (error) {
-    console.warn('Groq API failed, using mock response:', error.message);
-    return getMockCategorization(message);
+    const mockReason = classifyMockReason(error);
+    console.warn(`Groq API failed (${mockReason}), using mock response:`, error);
+    return { ...getMockCategorization(message), source: "mock", mockReason };
   }
 }
 
