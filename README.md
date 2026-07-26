@@ -159,8 +159,26 @@ A related bug found while building this: the Groq client was constructed at modu
 - Favicon matching the header's brand mark.
 - Dependabot for npm and GitHub Actions.
 - Prettier + markdownlint, wired into a Husky pre-commit hook via lint-staged.
-- `engines` field pinning the Node version Vite 7 requires.
+- `engines` field pinning the Node version Vite requires.
 - JSDoc comments on every hook, component, page, and utility module, plus `npm run docs` to generate a browsable static HTML API reference (`docs/api`, gitignored/regenerated locally — not a Sphinx setup, since this is a pure JS/React codebase and Sphinx doesn't parse JSDoc natively).
+
+## Dependency & Security Maintenance
+
+A pass through the open Dependabot backlog, prompted by five open PRs (four GitHub Actions bumps, one large grouped npm bump) sitting unmerged.
+
+### Dependabot backlog cleared
+
+- Merged four clean GitHub Actions major-version bumps (`actions/checkout`, `actions/setup-node`, `actions/upload-artifact`, `codecov/codecov-action`) — CI was already green on each.
+- The grouped npm PR (14 updates) failed CI because it bundled `tailwindcss` 3→4, a breaking rewrite, alongside 13 unrelated safe updates. Rather than close it, migrated the app to Tailwind v4 (`@tailwindcss/postcss`, CSS-based config via `@import "tailwindcss"` + `@custom-variant dark`, dropped `tailwind.config.cjs`) and merged the whole group.
+- Split `.github/dependabot.yml`'s npm group so it only bundles minor/patch updates going forward — major bumps now get their own individually reviewable PR, preventing this bundling problem from recurring.
+
+### Two high-severity `npm audit` findings fixed
+
+**js-yaml ReDoS ([GHSA-pm4m-ph32-ghv5](https://github.com/advisories/GHSA-pm4m-ph32-ghv5)):** `markdownlint-cli2` pinned its transitive `js-yaml` dependency to the exact vulnerable `5.2.1`. Forced resolution to the patched `5.2.2` via an npm `overrides` entry (a pure internal parser fix, no API changes).
+
+**React Router CSRF bypass ([GHSA-qwww-vcr4-c8h2](https://github.com/advisories/GHSA-qwww-vcr4-c8h2)):** `react-router-dom` was stuck at `7.18.1`, inside the vulnerable range; the fix shipped in `react-router` 8.3.0, which `react-router-dom` never received. Migrated off `react-router-dom` onto `react-router` v8 directly — its main package export already covers everything the app uses (`BrowserRouter`, `Routes`, `Route`, `Link`, `useLocation`, `MemoryRouter`), so this was an import-path change, not an API rewrite. (This app doesn't exercise the vulnerable RSC code path either way, but `react-router-dom` won't receive further security patches.)
+
+`npm audit` now reports zero vulnerabilities.
 
 ## Security Note
 
