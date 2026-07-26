@@ -33,11 +33,11 @@ function HomePage() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+          <div className="bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 rounded-lg p-6 text-center">
             <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">{stats.total}</div>
             <div className="text-sm text-gray-600 dark:text-gray-400">Total Messages Analyzed</div>
           </div>
-          <div className="bg-green-50 dark:bg-green-950/40 border border-green-200 dark:border-green-800 rounded-lg p-6">
+          <div className="bg-green-50 dark:bg-green-950/40 border border-green-200 dark:border-green-800 rounded-lg p-6 text-center">
             <div className="text-3xl font-bold text-green-600 dark:text-green-400">
               {stats.today}
             </div>
@@ -49,7 +49,7 @@ function HomePage() {
         <div className="grid grid-cols-3 gap-4 mb-6">
           <Link
             to="/analyze"
-            className="bg-blue-600 text-white rounded-lg p-6 hover:bg-blue-700 transition"
+            className="bg-blue-600 text-white rounded-lg p-6 hover:bg-blue-700 transition text-center"
           >
             <div className="text-2xl mb-2">📝</div>
             <div className="font-semibold mb-1">Analyze Message</div>
@@ -58,7 +58,7 @@ function HomePage() {
 
           <Link
             to="/history"
-            className="bg-purple-600 text-white rounded-lg p-6 hover:bg-purple-700 transition"
+            className="bg-purple-600 text-white rounded-lg p-6 hover:bg-purple-700 transition text-center"
           >
             <div className="text-2xl mb-2">📊</div>
             <div className="font-semibold mb-1">View History</div>
@@ -76,7 +76,7 @@ function HomePage() {
               localStorage.setItem('exampleMessage', random)
               window.location.href = '/analyze'
             }}
-            className="bg-orange-700 text-white rounded-lg p-6 hover:bg-orange-800 transition"
+            className="bg-orange-700 text-white rounded-lg p-6 hover:bg-orange-800 transition text-center"
           >
             <div className="text-2xl mb-2">🎯</div>
             <div className="font-semibold mb-1">Try Example</div>
