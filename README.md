@@ -8,7 +8,7 @@ Maintained by [Karl Johnson](https://github.com/hirekarl). See [CONTRIBUTING.md]
 
 An AI-powered triage tool that classifies incoming customer support messages, assesses urgency, and recommends a routing action — all in a single LLM call. Built for Relay AI, a SaaS customer operations platform.
 
-![Screenshot of the Customer Inbox Triage home page](docs/screenshot-light.jpg)
+![Screenshot of the Customer Inbox Triage home page](docs/images/screenshot-light.jpg)
 
 ## Tech Stack
 
