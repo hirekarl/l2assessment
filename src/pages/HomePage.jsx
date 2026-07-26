@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
+import { useTriageHistory } from '../hooks/useTriageHistory'
 
 function HomePage() {
-  const history = JSON.parse(localStorage.getItem('triageHistory') || '[]')
+  const { history } = useTriageHistory()
   const today = new Date().toDateString()
   const todayCount = history.filter(item =>
     new Date(item.timestamp).toDateString() === today
