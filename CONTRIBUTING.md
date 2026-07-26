@@ -35,6 +35,25 @@ installation, and how to run the app locally (`npm run dev:full`).
    a production build, and the Playwright E2E + accessibility suite — all
    must pass before merge.
 
+## Using Claude Code on This Repo
+
+`.claude/settings.json` and `.claude/hooks/` (see also `CLAUDE.md`) wire up
+Claude Code-specific automation on top of the git hooks above:
+
+- JS/JSX and Markdown files are auto-formatted immediately after Claude
+  writes or edits them (the same eslint/markdownlint + prettier pipeline as
+  `lint-staged`), not just at commit time.
+- A `Stop` hook runs `lint` + `test:coverage` before Claude can end a turn
+  in which `src`/`shared`/`api` changed, and blocks with the failure output
+  if either fails.
+- `git push --force` (without `--force-with-lease`) and `git reset --hard`
+  require explicit confirmation.
+- Writing a new `src/**/*.{js,jsx}` file without a sibling `*.test.*` file
+  triggers a reminder, given the 100% coverage requirement above.
+
+These only affect Claude Code sessions — they don't change the human
+workflow described above, and none of them replace the Husky/CI gates.
+
 ## Commit Messages
 
 This repo follows [Conventional Commits](https://www.conventionalcommits.org/):

@@ -7,7 +7,28 @@ This project does not follow semantic version tags (it's a continuously
 deployed single application, not a versioned package) — entries are grouped
 by work session instead.
 
-## [Unreleased]
+## 2026-07-26 — Repo Hygiene & Claude Code Tooling
+
+### Added
+
+- `.husky/commit-msg` hook rejecting any commit whose message contains a
+  `Co-Authored-By` trailer naming a known AI coding assistant.
+- `CLAUDE.md` documenting repo conventions (coverage bar, commit
+  conventions, the dependency-override pattern, deployment) for Claude Code
+  sessions.
+- Claude Code hooks (`.claude/settings.json`, `.claude/hooks/`): auto-format
+  JS/JSX and Markdown after Write/Edit (mirrors the lint-staged pipeline —
+  eslint --fix + prettier, markdownlint-cli2 --fix + prettier), a Stop hook
+  gating turn completion on lint + 100% coverage when source files changed,
+  a confirmation guard on `git push --force` / `git reset --hard`, and a
+  reminder when a new source file has no sibling test file.
+
+### Changed
+
+- Rewrote and force-pushed one already-published commit to strip an AI
+  co-author trailer that predated this session's sanitization.
+
+## 2026-07-26 — Professional-Repo Polish
 
 ### Added
 
