@@ -20,7 +20,7 @@ function Navigation() {
             </div>
             <div>
               <div className="font-bold text-lg">Relay AI</div>
-              <div className="text-xs text-blue-200">Customer Triage</div>
+              <div className="text-xs text-white">Customer Triage</div>
             </div>
           </Link>
 

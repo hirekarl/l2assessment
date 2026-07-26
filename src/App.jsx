@@ -10,12 +10,14 @@ function App() {
     <Router>
       <div className="min-h-screen bg-gray-50">
         <Navigation />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/analyze" element={<AnalyzePage />} />
-          <Route path="/history" element={<HistoryPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-        </Routes>
+        <main>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/analyze" element={<AnalyzePage />} />
+            <Route path="/history" element={<HistoryPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+          </Routes>
+        </main>
       </div>
     </Router>
   )

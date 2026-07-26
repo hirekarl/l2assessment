@@ -50,7 +50,7 @@ function HomePage() {
           >
             <div className="text-2xl mb-2">📝</div>
             <div className="font-semibold mb-1">Analyze Message</div>
-            <div className="text-sm text-blue-100">Triage a new customer message</div>
+            <div className="text-sm text-white">Triage a new customer message</div>
           </Link>
 
           <Link
@@ -73,11 +73,11 @@ function HomePage() {
               localStorage.setItem('exampleMessage', random)
               window.location.href = '/analyze'
             }}
-            className="bg-orange-600 text-white rounded-lg p-6 hover:bg-orange-700 transition"
+            className="bg-orange-700 text-white rounded-lg p-6 hover:bg-orange-800 transition"
           >
             <div className="text-2xl mb-2">🎯</div>
             <div className="font-semibold mb-1">Try Example</div>
-            <div className="text-sm text-orange-100">Use a sample message</div>
+            <div className="text-sm text-white">Use a sample message</div>
           </button>
         </div>
 

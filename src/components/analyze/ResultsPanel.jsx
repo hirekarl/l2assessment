@@ -32,7 +32,7 @@ function ResultsPanel({ results }) {
       {results.escalate && (
         <div className="mb-4 bg-red-50 dark:bg-red-950/40 border border-red-300 dark:border-red-700 rounded-lg px-4 py-3 flex items-center gap-2">
           <span className="text-red-700 dark:text-red-400 font-bold text-sm">⚠ ESCALATE</span>
-          <span className="text-red-600 dark:text-red-400 text-sm">This message requires immediate attention from a senior agent.</span>
+          <span className="text-red-700 dark:text-red-400 text-sm">This message requires immediate attention from a senior agent.</span>
         </div>
       )}
 
