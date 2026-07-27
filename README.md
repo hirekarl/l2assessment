@@ -71,7 +71,7 @@ App runs at `http://localhost:3000`. (`npm run dev` alone starts only the Vite f
 
 A customer message is submitted and analyzed in two steps:
 
-1. **LLM classification** — A structured prompt asks the Llama 3.3 70B model to return a JSON object with `category`, `urgency`, and `reasoning`. Temperature is set to 0.2 for consistent output.
+1. **LLM classification** — A structured prompt asks the Llama 3.3 70B model to return a JSON object with `reasoning`, `category`, and `urgency`. Temperature is set to 0.2 for consistent output. If the response fails to parse or validate, the request is retried once with a corrective note before falling back to a local mock classifier.
 2. **Template routing** — The category and urgency are mapped to a recommended action. High-urgency messages get escalation-specific instructions; the UI surfaces an escalation banner for immediate visibility.
 
 Results are saved to `localStorage` and viewable in the History tab, sorted newest-first.
@@ -180,7 +180,19 @@ A related bug found while building this: the Groq client was constructed at modu
 
 `AnalyzePage`, `HistoryPage`, and `DashboardPage` each mixed data access, business logic, and rendering in one component. Extracted single-purpose hooks (`useTriageHistory`, `useAnalyzeMessage`, `useDashboardStats`) and presentational components per page, so each piece has one reason to change.
 
-### 5. Other polish
+### 5. No CI gate on production deployments
+
+**Problem:** Vercel's git integration auto-deployed any push to `main` straight to production, even if CI (lint, tests, build, E2E) hadn't finished or had failed — a red pipeline didn't stop a bad deploy.
+
+**Fix:** Disabled Vercel's automatic git-triggered builds (`git.deploymentEnabled: false` in `vercel.json`) and added a `deploy` job to `.github/workflows/ci.yml` that only runs after both the `lint-test-build` and `e2e` jobs succeed, and only `if: github.event_name == 'push' && github.ref == 'refs/heads/main'`. Production now only deploys from a fully green `main` push — never a PR or a failing run.
+
+### 6. No retry on a bad LLM response, no prompt hardening
+
+**Problem:** Groq's JSON mode plus Zod validation already guarantee a well-typed response most of the time, but a single malformed or unparseable completion dropped straight to the local mock — no second attempt at the real model first. Separately, `SYSTEM_PROMPT` had no defense against a customer message trying to smuggle instructions to the classifier, and its example JSON asked for `category`/`urgency` before `reasoning`, letting the model commit to an answer before explaining it.
+
+**Fix:** `api/categorize.ts` now retries the Groq call once (with a corrective system message) when the response fails to parse or validate, before falling back to the mock; Groq API-level failures (auth, rate limit, network, missing key) still fall back immediately, unretried. `SYSTEM_PROMPT` (`shared/categorization.ts`) now instructs the model to treat the customer message strictly as data, lists `reasoning` first in the required JSON shape, and adds guidance for messages that plausibly span two categories (e.g. a bug-driven cancellation).
+
+### 7. Other polish
 
 - CI (GitHub Actions): lint, test with coverage, build, and E2E on every push/PR.
 - Codecov coverage reporting and badge.

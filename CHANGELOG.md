@@ -6,29 +6,43 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## 1.0.0 (2026-07-27)
 
-
 ### Features
 
-* add GitHub issue and PR templates ([035632e](https://github.com/hirekarl/l2assessment/commit/035632e0a1b2d1f4e69dbce2be63fe37b6b07c30))
-* **api:** move Groq categorization to a Vercel serverless function ([2600a6f](https://github.com/hirekarl/l2assessment/commit/2600a6ff6360c7444e44d1ea90558da397004947))
-* **brand:** replace default Vite favicon with the header's brand mark ([db5dfa4](https://github.com/hirekarl/l2assessment/commit/db5dfa40c9ed0d84992c5fd37134c76301d26d40))
-* complete enterprise excellence overhaul ([4d7c3af](https://github.com/hirekarl/l2assessment/commit/4d7c3afbc046473a0d8f3e195d8a07eb18ebdcae))
-* **theme:** add light/dark mode toggle ([b3be30c](https://github.com/hirekarl/l2assessment/commit/b3be30ca9ba239c91ce2d912cb2648ec25c3a354))
-* **triage:** surface AI-analyzed vs fallback-mode source in results ([8871160](https://github.com/hirekarl/l2assessment/commit/8871160d0148a3ab23d45be6fe4270decacff1ee))
-
+- add GitHub issue and PR templates ([035632e](https://github.com/hirekarl/l2assessment/commit/035632e0a1b2d1f4e69dbce2be63fe37b6b07c30))
+- **api:** move Groq categorization to a Vercel serverless function ([2600a6f](https://github.com/hirekarl/l2assessment/commit/2600a6ff6360c7444e44d1ea90558da397004947))
+- **brand:** replace default Vite favicon with the header's brand mark ([db5dfa4](https://github.com/hirekarl/l2assessment/commit/db5dfa40c9ed0d84992c5fd37134c76301d26d40))
+- complete enterprise excellence overhaul ([4d7c3af](https://github.com/hirekarl/l2assessment/commit/4d7c3afbc046473a0d8f3e195d8a07eb18ebdcae))
+- **theme:** add light/dark mode toggle ([b3be30c](https://github.com/hirekarl/l2assessment/commit/b3be30ca9ba239c91ce2d912cb2648ec25c3a354))
+- **triage:** surface AI-analyzed vs fallback-mode source in results ([8871160](https://github.com/hirekarl/l2assessment/commit/8871160d0148a3ab23d45be6fe4270decacff1ee))
 
 ### Bug Fixes
 
-* **a11y:** add a main landmark and resolve color-contrast failures ([46b82bd](https://github.com/hirekarl/l2assessment/commit/46b82bddfd48aa4b799452ec1c2e761f7553e73b))
-* **a11y:** upgrade text color contrast to satisfy WCAG AA standards ([867fca7](https://github.com/hirekarl/l2assessment/commit/867fca72e2263eba629ff0c7bf1a3869c2160bf6))
-* **ci:** resolve coverage, browser install, and e2e race-condition failures ([#6](https://github.com/hirekarl/l2assessment/issues/6)) ([31106bf](https://github.com/hirekarl/l2assessment/commit/31106bff43bf2202f270c7fe635dd73fdafad404))
-* **deploy:** rewrite client routes to index.html on Vercel ([3bd3460](https://github.com/hirekarl/l2assessment/commit/3bd346030f0a537eaa4ae10ac8c748eb431f11f0))
-* **e2e:** generate an HTML Playwright report in CI ([8728345](https://github.com/hirekarl/l2assessment/commit/87283452b6d28f6a385ee1fa9cd6822d5a2cdd6c))
-* **home:** compute dashboard stats at render time instead of in an effect ([ddc64fa](https://github.com/hirekarl/l2assessment/commit/ddc64fa2e24c3f89c9f87a6ec907c57a57f0e37c))
-* **lint-staged:** include .jsonc in the JSON/CSS glob ([6c0c523](https://github.com/hirekarl/l2assessment/commit/6c0c523d4358fb8476c88714611d770b2bafed06))
-* **llm:** lazily initialize Groq client and classify fallback reasons ([58fa2b4](https://github.com/hirekarl/l2assessment/commit/58fa2b41c865d6c81091d94460de63738aa14417))
-* migrate from react-router-dom to react-router v8 ([bd8ce5c](https://github.com/hirekarl/l2assessment/commit/bd8ce5cd9db7bff388c3d80080ef7a9afa080c52))
-* override js-yaml to patched 5.2.2 (ReDoS) ([29e2ca3](https://github.com/hirekarl/l2assessment/commit/29e2ca345eac6a15b426fbff5c1355dc472941fb))
+- **a11y:** add a main landmark and resolve color-contrast failures ([46b82bd](https://github.com/hirekarl/l2assessment/commit/46b82bddfd48aa4b799452ec1c2e761f7553e73b))
+- **a11y:** upgrade text color contrast to satisfy WCAG AA standards ([867fca7](https://github.com/hirekarl/l2assessment/commit/867fca72e2263eba629ff0c7bf1a3869c2160bf6))
+- **ci:** resolve coverage, browser install, and e2e race-condition failures ([#6](https://github.com/hirekarl/l2assessment/issues/6)) ([31106bf](https://github.com/hirekarl/l2assessment/commit/31106bff43bf2202f270c7fe635dd73fdafad404))
+- **deploy:** rewrite client routes to index.html on Vercel ([3bd3460](https://github.com/hirekarl/l2assessment/commit/3bd346030f0a537eaa4ae10ac8c748eb431f11f0))
+- **e2e:** generate an HTML Playwright report in CI ([8728345](https://github.com/hirekarl/l2assessment/commit/87283452b6d28f6a385ee1fa9cd6822d5a2cdd6c))
+- **home:** compute dashboard stats at render time instead of in an effect ([ddc64fa](https://github.com/hirekarl/l2assessment/commit/ddc64fa2e24c3f89c9f87a6ec907c57a57f0e37c))
+- **lint-staged:** include .jsonc in the JSON/CSS glob ([6c0c523](https://github.com/hirekarl/l2assessment/commit/6c0c523d4358fb8476c88714611d770b2bafed06))
+- **llm:** lazily initialize Groq client and classify fallback reasons ([58fa2b4](https://github.com/hirekarl/l2assessment/commit/58fa2b41c865d6c81091d94460de63738aa14417))
+- migrate from react-router-dom to react-router v8 ([bd8ce5c](https://github.com/hirekarl/l2assessment/commit/bd8ce5cd9db7bff388c3d80080ef7a9afa080c52))
+- override js-yaml to patched 5.2.2 (ReDoS) ([29e2ca3](https://github.com/hirekarl/l2assessment/commit/29e2ca345eac6a15b426fbff5c1355dc472941fb))
+
+## 2026-07-27 — AI Response Reliability & Prompt Hardening
+
+### Added
+
+- A bounded retry (one re-ask) in [api/categorize.ts](file:///D:/dev/pursuit/l2/l2assessment/api/categorize.ts) when the Groq response fails to parse or validate (`SyntaxError` / `TypeError` / `ZodError`), before falling back to the local mock. Groq API-level failures (auth, rate limit, network, missing key) are still not retried.
+
+### Changed
+
+- `SYSTEM_PROMPT` ([shared/categorization.ts](file:///D:/dev/pursuit/l2/l2assessment/shared/categorization.ts)): lists `reasoning` before `category`/`urgency` in the required JSON shape so the model reasons before committing, hardened against prompt injection via the customer message, and added guidance for messages that plausibly span two categories.
+
+## 2026-07-26 — CI-Gated Production Deployments
+
+### Changed
+
+- Disabled Vercel's git-integration auto-deploys (`git.deploymentEnabled: false` in [vercel.json](file:///D:/dev/pursuit/l2/l2assessment/vercel.json)) and added a `deploy` job to [.github/workflows/ci.yml](file:///D:/dev/pursuit/l2/l2assessment/.github/workflows/ci.yml), gated on the `lint-test-build` and `e2e` jobs passing and restricted to pushes on `main` — production now only deploys from a fully green `main` build, never a PR or a failing run.
 
 ## 2026-07-26 — Enterprise Excellence Overhaul
 
