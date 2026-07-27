@@ -92,7 +92,7 @@ async function requestCategorization(
 ): Promise<CategorizationResult> {
   const messages: Groq.Chat.ChatCompletionMessageParam[] = [
     { role: 'system', content: SYSTEM_PROMPT },
-    { role: 'user', content: message },
+    { role: 'user', content: `<customer_message>\n${message}\n</customer_message>` },
   ]
   if (isRetry) {
     messages.push({ role: 'system', content: RETRY_NOTE })
