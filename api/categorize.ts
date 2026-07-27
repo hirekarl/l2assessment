@@ -93,7 +93,8 @@ export default async function handler(req: RequestLike, res: ResponseLike): Prom
       response_format: { type: 'json_object' },
     })
 
-    const parsedRaw = JSON.parse(response.choices[0]!.message.content)
+    const rawContent = response.choices[0]!.message.content || '{}'
+    const parsedRaw = JSON.parse(rawContent)
     if (typeof parsedRaw.reasoning !== 'string' || !parsedRaw.reasoning.trim()) {
       parsedRaw.reasoning = 'No reasoning provided.'
     }
