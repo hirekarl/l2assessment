@@ -1,0 +1,4 @@
+Contact: https://github.com/hirekarl/l2assessment/issues
+Expires: 2027-07-27T23:59:59.000Z
+Canonical: https://l2assessment-theta.vercel.app/.well-known/security.txt
+Preferred-Languages: en

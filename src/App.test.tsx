@@ -10,6 +10,7 @@ describe('App', () => {
     await import('./pages/AnalyzePage')
     await import('./pages/HistoryPage')
     await import('./pages/DashboardPage')
+    await import('./pages/NotFoundPage')
   })
   it('renders the navigation and the home page by default', async () => {
     render(
@@ -59,6 +60,19 @@ describe('App', () => {
     )
     await waitFor(() => {
       expect(screen.getByText('Dashboard')).toBeInTheDocument()
+    })
+  })
+
+  it('renders the not-found page for an unmatched route', async () => {
+    render(
+      <ThemeProvider>
+        <MemoryRouter initialEntries={['/this-route-does-not-exist']}>
+          <AppShell />
+        </MemoryRouter>
+      </ThemeProvider>
+    )
+    await waitFor(() => {
+      expect(screen.getByText('Page not found')).toBeInTheDocument()
     })
   })
 
