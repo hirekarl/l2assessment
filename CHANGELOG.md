@@ -4,6 +4,13 @@ All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). This project does not follow semantic version tags (it's a continuously deployed single application, not a versioned package) — entries are grouped by work session instead.
 
+## [1.1.0](https://github.com/hirekarl/l2assessment/compare/v1.0.0...v1.1.0) (2026-07-27)
+
+
+### Features
+
+* **ci:** gate Vercel production deploy on CI + restrict to main pushes ([#8](https://github.com/hirekarl/l2assessment/issues/8)) ([58fbc47](https://github.com/hirekarl/l2assessment/commit/58fbc47267a38ae83a235c156e14b9362dd4c0ae))
+
 ## 1.0.0 (2026-07-27)
 
 
