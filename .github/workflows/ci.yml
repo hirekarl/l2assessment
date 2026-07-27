@@ -69,3 +69,32 @@ jobs:
           name: playwright-report
           path: playwright-report
           retention-days: 7
+
+  deploy:
+    name: Deploy to Vercel (production)
+    needs: [lint-test-build, e2e]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm install -g vercel@57
+
+      - name: Pull Vercel environment
+        run: vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+
+      - name: Build
+        run: vercel build --prod --token=$VERCEL_TOKEN
+
+      - name: Deploy
+        run: vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN

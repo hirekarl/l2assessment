@@ -23,4 +23,4 @@ When a new devDependency's declared peer range doesn't cover the installed tool 
 
 ## Deployment
 
-Vercel, via git integration on push to `main` (no deploy step in `.github/workflows/ci.yml`). `GROQ_API_KEY` lives in Vercel's server-only env vars — CI never exercises the real Groq call path (tests use the mock fallback), so a bad key there won't be caught by CI.
+Vercel, via a `deploy` job in `.github/workflows/ci.yml` — not Vercel's git integration (`git.deploymentEnabled: false` in `vercel.json` disables its automatic push-triggered builds entirely). The `deploy` job `needs: [lint-test-build, e2e]` and only runs `if: github.event_name == 'push' && github.ref == 'refs/heads/main'`, so production only deploys after both CI jobs are green, and only for pushes to `main` (never PRs or other branches). Requires the `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` repo secrets. `GROQ_API_KEY` lives in Vercel's server-only env vars — CI never exercises the real Groq call path (tests use the mock fallback), so a bad key there won't be caught by CI.
