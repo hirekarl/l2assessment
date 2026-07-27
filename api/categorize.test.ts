@@ -20,20 +20,27 @@ vi.mock('groq-sdk', () => ({ default: FakeGroq }))
 interface MockResponse {
   statusCode: number | null
   body: Record<string, unknown> | null
+  headers: Record<string, string>
   status: (code: number) => MockResponse
   json: (payload: unknown) => MockResponse
+  setHeader: (name: string, value: string) => MockResponse
 }
 
 function mockRes(): MockResponse {
   return {
     statusCode: null,
     body: null,
+    headers: {},
     status(code: number) {
       this.statusCode = code
       return this
     },
     json(payload: unknown) {
       this.body = payload as Record<string, unknown>
+      return this
+    },
+    setHeader(name: string, value: string) {
+      this.headers[name] = value
       return this
     },
   }
@@ -54,11 +61,13 @@ describe('POST /api/categorize', () => {
     vi.restoreAllMocks()
   })
 
-  it('rejects non-POST methods', async () => {
+  it('rejects non-POST methods and sets security headers', async () => {
     const { default: handler } = await import('./categorize')
     const res = mockRes()
     await handler({ method: 'GET' }, res)
     expect(res.statusCode).toBe(405)
+    expect(res.headers['X-Content-Type-Options']).toBe('nosniff')
+    expect(res.headers['X-Frame-Options']).toBe('DENY')
   })
 
   it('rejects a missing message body', async () => {

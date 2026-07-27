@@ -1,11 +1,10 @@
 import Groq from 'groq-sdk'
 import {
   SYSTEM_PROMPT,
-  VALID_CATEGORIES,
-  VALID_URGENCIES,
+  CategorizationResultSchema,
   getMockCategorization,
 } from '../shared/categorization'
-import type { Category, MockReason, Urgency } from '../src/types/triage'
+import type { MockReason } from '../src/types/triage'
 
 /** Thrown when GROQ_API_KEY is not configured in the server environment. */
 class MissingApiKeyError extends Error {}
@@ -49,6 +48,17 @@ interface RequestLike {
 interface ResponseLike {
   status: (code: number) => ResponseLike
   json: (payload: unknown) => ResponseLike
+  setHeader?: (name: string, value: string) => ResponseLike
+}
+
+/**
+ * Sets standard security headers on serverless API responses.
+ */
+function applySecurityHeaders(res: ResponseLike): void {
+  res.setHeader?.('X-Content-Type-Options', 'nosniff')
+  res.setHeader?.('X-Frame-Options', 'DENY')
+  res.setHeader?.('Referrer-Policy', 'strict-origin-when-cross-origin')
+  res.setHeader?.('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
 }
 
 /**
@@ -58,6 +68,8 @@ interface ResponseLike {
  * @param res - Node's ServerResponse (Vercel adds .status()/.json() helpers).
  */
 export default async function handler(req: RequestLike, res: ResponseLike): Promise<void> {
+  applySecurityHeaders(res)
+
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' })
     return
@@ -81,18 +93,14 @@ export default async function handler(req: RequestLike, res: ResponseLike): Prom
       response_format: { type: 'json_object' },
     })
 
-    const parsed = JSON.parse(response.choices[0].message.content!)
-
-    const category: Category = VALID_CATEGORIES.includes(parsed.category)
-      ? parsed.category
-      : 'General Inquiry'
-
-    const urgency: Urgency = VALID_URGENCIES.includes(parsed.urgency) ? parsed.urgency : 'Medium'
+    const parsedRaw = JSON.parse(response.choices[0]!.message.content)
+    if (typeof parsedRaw.reasoning !== 'string' || !parsedRaw.reasoning.trim()) {
+      parsedRaw.reasoning = 'No reasoning provided.'
+    }
+    const parsedData = CategorizationResultSchema.parse(parsedRaw)
 
     res.status(200).json({
-      category,
-      urgency,
-      reasoning: parsed.reasoning || 'No reasoning provided.',
+      ...parsedData,
       source: 'llm',
     })
   } catch (error) {

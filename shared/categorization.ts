@@ -1,9 +1,25 @@
+import { z } from 'zod'
 import type { Category, CategorizationResult, Urgency } from '../src/types/triage'
 
 /**
  * Categorization logic shared between the server-side Groq client (api/categorize.ts)
  * and the client-side last-resort fallback (src/utils/llmHelper.ts).
  */
+
+/** Zod schema enforcing valid Category values with General Inquiry fallback. */
+export const CategorySchema = z
+  .enum(['Billing Issue', 'Technical Problem', 'Feature Request', 'General Inquiry'])
+  .catch('General Inquiry')
+
+/** Zod schema enforcing valid Urgency values with Medium fallback. */
+export const UrgencySchema = z.enum(['High', 'Medium', 'Low']).catch('Medium')
+
+/** Zod schema enforcing valid CategorizationResult objects. */
+export const CategorizationResultSchema = z.object({
+  category: CategorySchema,
+  urgency: UrgencySchema,
+  reasoning: z.string().default('No reasoning provided.'),
+})
 
 /** System prompt sent to the Groq chat completion for message triage. */
 export const SYSTEM_PROMPT = `You are a customer support triage assistant for Relay AI, a SaaS customer operations platform.

@@ -4,6 +4,23 @@ All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). This project does not follow semantic version tags (it's a continuously deployed single application, not a versioned package) — entries are grouped by work session instead.
 
+## 2026-07-26 — Enterprise Excellence Overhaul
+
+### Added
+
+- `ErrorBoundary` component ([src/components/shared/ErrorBoundary.tsx](file:///D:/dev/pursuit/l2/l2assessment/src/components/shared/ErrorBoundary.tsx)) and unit tests for application crash resilience.
+- `Zod` runtime schema validation (`CategorizationResultSchema`) in [shared/categorization.ts](file:///D:/dev/pursuit/l2/l2assessment/shared/categorization.ts) and [api/categorize.ts](file:///D:/dev/pursuit/l2/l2assessment/api/categorize.ts).
+- HTTP Security Headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`) in [api/categorize.ts](file:///D:/dev/pursuit/l2/l2assessment/api/categorize.ts) and [vercel.json](file:///D:/dev/pursuit/l2/l2assessment/vercel.json).
+- TypeScript path aliases (`@/*` -> `./src/*`, `@shared/*` -> `./shared/*`) in [tsconfig.json](file:///D:/dev/pursuit/l2/l2assessment/tsconfig.json) and [vite.config.js](file:///D:/dev/pursuit/l2/l2assessment/vite.config.js).
+- Playwright multi-browser test matrix (`chromium`, `firefox`, `webkit`) and visual snapshot regression tests in [e2e/visual.spec.js](file:///D:/dev/pursuit/l2/l2assessment/e2e/visual.spec.js).
+- Commitlint configuration (`.commitlintrc.json`) for Conventional Commits enforcement.
+- Release Please GitHub Actions workflow (`.github/workflows/release-please.yml`).
+- Architecture Decision Records in `docs/adr/` (`0001-vercel-serverless-architecture.md`, `0002-groq-llama3-model-selection.md`, `0003-component-design-and-accessibility.md`).
+
+### Changed
+
+- Updated [src/App.tsx](file:///D:/dev/pursuit/l2/l2assessment/src/App.tsx) with route-based code splitting using `React.lazy` and `Suspense`.
+
 ## 2026-07-26 — React TypeScript & TypeDoc Migration
 
 ### Added

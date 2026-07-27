@@ -108,7 +108,16 @@ The application has been fully refactored to **React TypeScript** to improve mai
 - Converted all frontend components, hooks, contexts, pages, shared utilities, and the Vercel serverless API route (`api/categorize.ts`) from JavaScript (`.js`/`.jsx`) to TypeScript (`.ts`/`.tsx`).
 - Integrated `typescript-eslint` flat configuration into ESLint for linting `.ts` and `.tsx` files.
 
-### 3. TypeDoc Documentation Generation (`npm run docs`)
+### 4. Enterprise Excellence Overhaul
+
+- **React Error Boundary & Code Splitting**: Added `<ErrorBoundary>` ([src/components/shared/ErrorBoundary.tsx](file:///D:/dev/pursuit/l2/l2assessment/src/components/shared/ErrorBoundary.tsx)) and `React.lazy` + `Suspense` in [src/App.tsx](file:///D:/dev/pursuit/l2/l2assessment/src/App.tsx) for component crash resilience and dynamic route-based bundle splitting.
+- **Runtime Zod Validation**: Added Zod schemas (`CategorizationResultSchema`) in [shared/categorization.ts](file:///D:/dev/pursuit/l2/l2assessment/shared/categorization.ts) to validate API request payloads and AI response structures at runtime.
+- **Security & Headers**: Implemented HTTP security headers (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`) in [api/categorize.ts](file:///D:/dev/pursuit/l2/l2assessment/api/categorize.ts) and [vercel.json](file:///D:/dev/pursuit/l2/l2assessment/vercel.json).
+- **TypeScript Path Aliases**: Configured `@/*` and `@shared/*` path resolution in [tsconfig.json](file:///D:/dev/pursuit/l2/l2assessment/tsconfig.json) and [vite.config.js](file:///D:/dev/pursuit/l2/l2assessment/vite.config.js).
+- **Multi-Browser & Visual E2E**: Configured Chromium, Firefox, and WebKit test matrix with visual snapshot regression testing in [playwright.config.js](file:///D:/dev/pursuit/l2/l2assessment/playwright.config.js) and [e2e/visual.spec.js](file:///D:/dev/pursuit/l2/l2assessment/e2e/visual.spec.js).
+- **Architecture Decision Records (ADRs)**: Documented architectural choices in `docs/adr/`.
+
+### 5. TypeDoc Documentation Generation (`npm run docs`)
 
 - Transitioned documentation generation from `jsdoc` to **TypeDoc** (`typedoc.json`).
 - All existing JSDoc comment blocks (`@param`, `@returns`, `@description`) on functions and components are natively extracted alongside TypeScript signatures into browsable static HTML documentation in `docs/api`.
