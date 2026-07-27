@@ -60,15 +60,6 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - run: npx playwright test e2e/visual.spec.js --update-snapshots
-
-      - name: TEMP - Upload updated visual snapshots
-        uses: actions/upload-artifact@v7
-        with:
-          name: visual-snapshots
-          path: e2e/visual.spec.js-snapshots
-          retention-days: 1
-
       - run: npm run test:e2e
 
       - name: Upload Playwright report
