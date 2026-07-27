@@ -81,8 +81,7 @@ function HomePage() {
                 'The dashboard is loading very slowly',
                 'Can you add a dark mode feature?',
               ]
-              const random =
-                examples[Math.floor(Math.random() * examples.length)] ?? examples[0] ?? ''
+              const random = examples[Math.floor(Math.random() * examples.length)]!
               localStorage.setItem('exampleMessage', random)
               window.location.href = '/analyze'
             }}
