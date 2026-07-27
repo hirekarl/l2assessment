@@ -34,7 +34,7 @@ export function getRecommendedAction(
   urgency: Urgency | string
 ): string {
   if (urgency === 'High') {
-    return urgentOverrides[category] ?? urgentOverrides['Unknown'] ?? 'Escalate immediately.'
+    return urgentOverrides[category] ?? urgentOverrides['Unknown']!
   }
   return actionTemplates[category] ?? 'No recommendation available.'
 }

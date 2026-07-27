@@ -7,6 +7,9 @@ test.describe('Accessibility', () => {
   for (const route of routes) {
     test(`${route} has no detectable axe violations`, async ({ page }) => {
       await page.goto(route)
+      // Pages are lazy-loaded behind Suspense, so wait for the real content
+      // (not just the loading spinner) before auditing.
+      await page.getByRole('heading', { level: 1 }).waitFor({ state: 'visible' })
       const results = await new AxeBuilder({ page }).analyze()
       expect(results.violations, JSON.stringify(results.violations, null, 2)).toEqual([])
     })

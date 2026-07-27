@@ -98,6 +98,24 @@ describe('POST /api/categorize', () => {
     expect(res.body?.reasoning).toBe('No reasoning provided.')
   })
 
+  it('defaults to General Inquiry/Medium when Groq content is an empty string', async () => {
+    createMock.mockResolvedValue({
+      choices: [{ message: { content: '' } }],
+    })
+    const { default: handler } = await import('./categorize')
+    const res = mockRes()
+
+    await handler({ method: 'POST', body: { message: 'hi' } }, res)
+
+    expect(res.statusCode).toBe(200)
+    expect(res.body).toMatchObject({
+      source: 'llm',
+      category: 'General Inquiry',
+      urgency: 'Medium',
+      reasoning: 'No reasoning provided.',
+    })
+  })
+
   it('reuses the memoized Groq client across multiple invocations', async () => {
     createMock.mockResolvedValue({
       choices: [
