@@ -4,6 +4,20 @@ All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). This project does not follow semantic version tags (it's a continuously deployed single application, not a versioned package) — entries are grouped by work session instead.
 
+## [1.2.0](https://github.com/hirekarl/l2assessment/compare/v1.1.0...v1.2.0) (2026-07-27)
+
+
+### Features
+
+* **api:** retry once on malformed Groq responses, refine classification prompt ([509b6a6](https://github.com/hirekarl/l2assessment/commit/509b6a689738ec5a9fd2d94ccfd7c77b92e83a11))
+* **api:** retry once on malformed Groq responses, refine classification prompt ([c03a2ce](https://github.com/hirekarl/l2assessment/commit/c03a2cee8b23c3a148f2acadbc576418e2734bd1))
+
+
+### Bug Fixes
+
+* **api:** harden prompt injection defense with explicit message delimiters ([7053a9a](https://github.com/hirekarl/l2assessment/commit/7053a9a681edab303b7ed74a8ad43780e3c1bf61))
+* **api:** report "Invalid response format" for TypeError/ZodError too ([711a632](https://github.com/hirekarl/l2assessment/commit/711a6321867a8642070a4bfae1b46d752cca579f))
+
 ## [1.1.0](https://github.com/hirekarl/l2assessment/compare/v1.0.0...v1.1.0) (2026-07-27)
 
 
