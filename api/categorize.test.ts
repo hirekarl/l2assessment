@@ -340,6 +340,28 @@ describe('POST /api/categorize', () => {
     expect(createMock).toHaveBeenCalledTimes(2)
   })
 
+  it('classifies a null JSON response as "Invalid response format" after exhausting retries', async () => {
+    createMock.mockResolvedValue({ choices: [{ message: { content: 'null' } }] })
+    const { default: handler } = await import('./categorize')
+    const res = mockRes()
+
+    await handler({ method: 'POST', body: { message: 'hi' } }, res)
+
+    expect(res.body?.mockReason).toBe('Invalid response format')
+    expect(createMock).toHaveBeenCalledTimes(2)
+  })
+
+  it('classifies a non-object JSON response as "Invalid response format" after exhausting retries', async () => {
+    createMock.mockResolvedValue({ choices: [{ message: { content: '[]' } }] })
+    const { default: handler } = await import('./categorize')
+    const res = mockRes()
+
+    await handler({ method: 'POST', body: { message: 'hi' } }, res)
+
+    expect(res.body?.mockReason).toBe('Invalid response format')
+    expect(createMock).toHaveBeenCalledTimes(2)
+  })
+
   it('classifies any other error as "Unknown error" without retrying', async () => {
     createMock.mockRejectedValue(new Error('mystery failure'))
     const { default: handler } = await import('./categorize')

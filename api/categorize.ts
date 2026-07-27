@@ -41,7 +41,7 @@ function classifyMockReason(error: unknown): MockReason {
   if (error instanceof Groq.RateLimitError) return 'Rate limit exceeded'
   if (error instanceof Groq.APIConnectionError) return 'Network error'
   if (error instanceof Groq.APIError) return 'AI service error'
-  if (error instanceof SyntaxError) return 'Invalid response format'
+  if (isRetryableParseError(error)) return 'Invalid response format'
   return 'Unknown error'
 }
 
