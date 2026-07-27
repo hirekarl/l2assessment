@@ -24,7 +24,7 @@ function Navigation() {
             </div>
             <div>
               <div className="font-extrabold text-lg tracking-tight text-white">Relay AI</div>
-              <div className="text-[11px] text-blue-100 dark:text-gray-400 font-medium">
+              <div className="text-[11px] text-blue-50 dark:text-gray-400 font-medium">
                 Customer Triage
               </div>
             </div>

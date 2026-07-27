@@ -62,7 +62,7 @@ function HomePage() {
           >
             <div className="text-3xl mb-2">📝</div>
             <div className="font-bold text-lg mb-1">Analyze Message</div>
-            <div className="text-sm text-blue-100 font-medium">Triage a new customer message</div>
+            <div className="text-sm text-blue-50 font-medium">Triage a new customer message</div>
           </Link>
 
           <Link
@@ -71,7 +71,7 @@ function HomePage() {
           >
             <div className="text-3xl mb-2">📊</div>
             <div className="font-bold text-lg mb-1">View History</div>
-            <div className="text-sm text-purple-100 font-medium">See past analyses</div>
+            <div className="text-sm text-purple-50 font-medium">See past analyses</div>
           </Link>
 
           <button
@@ -89,7 +89,7 @@ function HomePage() {
           >
             <div className="text-3xl mb-2">🎯</div>
             <div className="font-bold text-lg mb-1">Try Example</div>
-            <div className="text-sm text-orange-100 font-medium">Use a sample message</div>
+            <div className="text-sm text-orange-50 font-medium">Use a sample message</div>
           </button>
         </div>
 
