@@ -36,7 +36,7 @@ export default defineConfig([
       },
     },
     {
-      files: ['api/**/*.{js,ts}', 'shared/**/*.{js,ts}', '*.config.js'],
+      files: ['api/**/*.{js,ts}', 'shared/**/*.{js,ts}', 'scripts/**/*.js', '*.config.js'],
       extends: [js.configs.recommended, ...tseslint.configs.recommended],
       languageOptions: {
         ecmaVersion: 'latest',

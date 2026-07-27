@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb"/>
+      <stop offset="50%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <rect x="100" y="100" width="120" height="120" rx="24" fill="#ffffff"/>
+  <rect x="128" y="140" width="64" height="44" rx="6" fill="#2563eb"/>
+  <path d="M128 140 L160 168 L192 140" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <text x="100" y="310" font-family="Arial, Helvetica, sans-serif" font-size="88" font-weight="700" fill="#ffffff">Relay AI</text>
+  <text x="100" y="360" font-family="Arial, Helvetica, sans-serif" font-size="34" fill="#dbeafe">Customer Triage</text>
+
+  <text x="100" y="450" font-family="Arial, Helvetica, sans-serif" font-size="32" fill="#e0e7ff">AI-powered categorization, prioritization, and</text>
+  <text x="100" y="490" font-family="Arial, Helvetica, sans-serif" font-size="32" fill="#e0e7ff">routing for incoming customer support messages.</text>
+</svg>
