@@ -1,10 +1,17 @@
 import Groq from 'groq-sdk'
+import { ZodError } from 'zod'
 import {
   SYSTEM_PROMPT,
   CategorizationResultSchema,
   getMockCategorization,
 } from '../shared/categorization'
-import type { MockReason } from '../src/types/triage'
+import type { CategorizationResult, MockReason } from '../src/types/triage'
+
+const MAX_ATTEMPTS = 2
+
+/** Instruction appended on a retry after the previous Groq response failed to parse/validate. */
+const RETRY_NOTE =
+  'Your previous response could not be parsed as valid JSON. Respond with valid JSON only, matching the required structure exactly.'
 
 /** Thrown when GROQ_API_KEY is not configured in the server environment. */
 class MissingApiKeyError extends Error {}
@@ -38,6 +45,15 @@ function classifyMockReason(error: unknown): MockReason {
   return 'Unknown error'
 }
 
+/**
+ * True when the error indicates Groq responded but the content didn't parse or
+ * validate as a CategorizationResult — as opposed to the Groq API call itself
+ * failing (auth, rate limit, network, missing key), which should not be retried.
+ */
+function isRetryableParseError(error: unknown): boolean {
+  return error instanceof SyntaxError || error instanceof TypeError || error instanceof ZodError
+}
+
 interface RequestLike {
   method?: string
   body?: {
@@ -62,6 +78,42 @@ function applySecurityHeaders(res: ResponseLike): void {
 }
 
 /**
+ * Calls Groq once and parses/validates the response into a CategorizationResult.
+ * Throws SyntaxError/TypeError/ZodError on unparseable or malformed content, or the
+ * underlying Groq SDK error on an API-level failure.
+ * @param client - The Groq client.
+ * @param message - The customer message to classify.
+ * @param isRetry - When true, appends a corrective note asking for valid JSON.
+ */
+async function requestCategorization(
+  client: Groq,
+  message: string,
+  isRetry: boolean
+): Promise<CategorizationResult> {
+  const messages: Groq.Chat.ChatCompletionMessageParam[] = [
+    { role: 'system', content: SYSTEM_PROMPT },
+    { role: 'user', content: message },
+  ]
+  if (isRetry) {
+    messages.push({ role: 'system', content: RETRY_NOTE })
+  }
+
+  const response = await client.chat.completions.create({
+    model: 'llama-3.3-70b-versatile',
+    messages,
+    temperature: 0.2,
+    response_format: { type: 'json_object' },
+  })
+
+  const rawContent = response.choices[0]!.message.content || '{}'
+  const parsedRaw = JSON.parse(rawContent)
+  if (typeof parsedRaw.reasoning !== 'string' || !parsedRaw.reasoning.trim()) {
+    parsedRaw.reasoning = 'No reasoning provided.'
+  }
+  return CategorizationResultSchema.parse(parsedRaw)
+}
+
+/**
  * Vercel serverless function: POST { message } -> triage classification.
  * Holds the Groq API key server-side so it is never exposed to the browser.
  * @param req - Node's IncomingMessage; parsed body at req.body.
@@ -83,22 +135,18 @@ export default async function handler(req: RequestLike, res: ResponseLike): Prom
 
   try {
     const client = getGroqClient()
-    const response = await client.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: message },
-      ],
-      temperature: 0.2,
-      response_format: { type: 'json_object' },
-    })
-
-    const rawContent = response.choices[0]!.message.content || '{}'
-    const parsedRaw = JSON.parse(rawContent)
-    if (typeof parsedRaw.reasoning !== 'string' || !parsedRaw.reasoning.trim()) {
-      parsedRaw.reasoning = 'No reasoning provided.'
+    let parsedData: CategorizationResult | undefined
+    let lastError: unknown
+    for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+      try {
+        parsedData = await requestCategorization(client, message, attempt > 0)
+        break
+      } catch (error) {
+        if (!isRetryableParseError(error)) throw error
+        lastError = error
+      }
     }
-    const parsedData = CategorizationResultSchema.parse(parsedRaw)
+    if (!parsedData) throw lastError
 
     res.status(200).json({
       ...parsedData,

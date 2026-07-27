@@ -203,9 +203,10 @@ describe('POST /api/categorize', () => {
     expect(res.body?.source).toBe('mock')
     expect(res.body?.mockReason).toBe('Missing API key')
     expect(res.body?.category).toBe('Technical Problem')
+    expect(createMock).not.toHaveBeenCalled()
   })
 
-  it('classifies an AuthenticationError as "Invalid API key"', async () => {
+  it('classifies an AuthenticationError as "Invalid API key" without retrying', async () => {
     createMock.mockRejectedValue(new FakeAuthenticationError('bad key'))
     const { default: handler } = await import('./categorize')
     const res = mockRes()
@@ -214,9 +215,10 @@ describe('POST /api/categorize', () => {
 
     expect(res.body?.source).toBe('mock')
     expect(res.body?.mockReason).toBe('Invalid API key')
+    expect(createMock).toHaveBeenCalledTimes(1)
   })
 
-  it('classifies a RateLimitError as "Rate limit exceeded"', async () => {
+  it('classifies a RateLimitError as "Rate limit exceeded" without retrying', async () => {
     createMock.mockRejectedValue(new FakeRateLimitError('slow down'))
     const { default: handler } = await import('./categorize')
     const res = mockRes()
@@ -224,9 +226,10 @@ describe('POST /api/categorize', () => {
     await handler({ method: 'POST', body: { message: 'hi' } }, res)
 
     expect(res.body?.mockReason).toBe('Rate limit exceeded')
+    expect(createMock).toHaveBeenCalledTimes(1)
   })
 
-  it('classifies an APIConnectionError as "Network error"', async () => {
+  it('classifies an APIConnectionError as "Network error" without retrying', async () => {
     createMock.mockRejectedValue(new FakeAPIConnectionError('no route'))
     const { default: handler } = await import('./categorize')
     const res = mockRes()
@@ -234,9 +237,10 @@ describe('POST /api/categorize', () => {
     await handler({ method: 'POST', body: { message: 'hi' } }, res)
 
     expect(res.body?.mockReason).toBe('Network error')
+    expect(createMock).toHaveBeenCalledTimes(1)
   })
 
-  it('classifies a generic APIError as "AI service error"', async () => {
+  it('classifies a generic APIError as "AI service error" without retrying', async () => {
     createMock.mockRejectedValue(new FakeAPIError('server exploded'))
     const { default: handler } = await import('./categorize')
     const res = mockRes()
@@ -244,9 +248,88 @@ describe('POST /api/categorize', () => {
     await handler({ method: 'POST', body: { message: 'hi' } }, res)
 
     expect(res.body?.mockReason).toBe('AI service error')
+    expect(createMock).toHaveBeenCalledTimes(1)
   })
 
-  it('classifies malformed JSON from the model as "Invalid response format"', async () => {
+  it('retries once on malformed JSON and succeeds on the second attempt', async () => {
+    createMock
+      .mockResolvedValueOnce({ choices: [{ message: { content: 'not json' } }] })
+      .mockResolvedValueOnce({
+        choices: [
+          {
+            message: {
+              content: JSON.stringify({
+                category: 'Technical Problem',
+                urgency: 'High',
+                reasoning: 'Recovered on retry.',
+              }),
+            },
+          },
+        ],
+      })
+    const { default: handler } = await import('./categorize')
+    const res = mockRes()
+
+    await handler({ method: 'POST', body: { message: 'it broke' } }, res)
+
+    expect(res.body?.source).toBe('llm')
+    expect(res.body?.category).toBe('Technical Problem')
+    expect(createMock).toHaveBeenCalledTimes(2)
+    const retryMessages = createMock.mock.calls[1]![0].messages as Array<{ content: string }>
+    expect(retryMessages.some((m) => m.content.includes('could not be parsed'))).toBe(true)
+  })
+
+  it('retries on a TypeError from a null JSON response and succeeds on the second attempt', async () => {
+    createMock
+      .mockResolvedValueOnce({ choices: [{ message: { content: 'null' } }] })
+      .mockResolvedValueOnce({
+        choices: [
+          {
+            message: {
+              content: JSON.stringify({
+                category: 'General Inquiry',
+                urgency: 'Low',
+                reasoning: 'Recovered on retry.',
+              }),
+            },
+          },
+        ],
+      })
+    const { default: handler } = await import('./categorize')
+    const res = mockRes()
+
+    await handler({ method: 'POST', body: { message: 'hi' } }, res)
+
+    expect(res.body?.source).toBe('llm')
+    expect(createMock).toHaveBeenCalledTimes(2)
+  })
+
+  it('retries on a ZodError from a non-object JSON response and succeeds on the second attempt', async () => {
+    createMock
+      .mockResolvedValueOnce({ choices: [{ message: { content: '[]' } }] })
+      .mockResolvedValueOnce({
+        choices: [
+          {
+            message: {
+              content: JSON.stringify({
+                category: 'General Inquiry',
+                urgency: 'Low',
+                reasoning: 'Recovered on retry.',
+              }),
+            },
+          },
+        ],
+      })
+    const { default: handler } = await import('./categorize')
+    const res = mockRes()
+
+    await handler({ method: 'POST', body: { message: 'hi' } }, res)
+
+    expect(res.body?.source).toBe('llm')
+    expect(createMock).toHaveBeenCalledTimes(2)
+  })
+
+  it('classifies malformed JSON from the model as "Invalid response format" after exhausting retries', async () => {
     createMock.mockResolvedValue({ choices: [{ message: { content: 'not json' } }] })
     const { default: handler } = await import('./categorize')
     const res = mockRes()
@@ -254,9 +337,10 @@ describe('POST /api/categorize', () => {
     await handler({ method: 'POST', body: { message: 'hi' } }, res)
 
     expect(res.body?.mockReason).toBe('Invalid response format')
+    expect(createMock).toHaveBeenCalledTimes(2)
   })
 
-  it('classifies any other error as "Unknown error"', async () => {
+  it('classifies any other error as "Unknown error" without retrying', async () => {
     createMock.mockRejectedValue(new Error('mystery failure'))
     const { default: handler } = await import('./categorize')
     const res = mockRes()
@@ -264,5 +348,6 @@ describe('POST /api/categorize', () => {
     await handler({ method: 'POST', body: { message: 'hi' } }, res)
 
     expect(res.body?.mockReason).toBe('Unknown error')
+    expect(createMock).toHaveBeenCalledTimes(1)
   })
 })
