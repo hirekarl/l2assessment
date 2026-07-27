@@ -2,6 +2,12 @@
   "name": "l2-assessment",
   "private": true,
   "version": "1.2.0",
+  "description": "AI-powered customer message triage: categorizes, prioritizes, and routes incoming support messages using Groq (Llama 3.3 70B).",
+  "homepage": "https://l2assessment-theta.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hirekarl/l2assessment.git"
+  },
   "license": "MIT",
   "type": "module",
   "engines": {
@@ -20,6 +26,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "docs": "typedoc",
+    "generate:assets": "node scripts/generate-assets.js",
     "typecheck": "tsc --noEmit",
     "prepare": "husky"
   },
@@ -79,6 +86,7 @@
     "markdownlint-cli2": "^0.23.1",
     "postcss": "^8.5.6",
     "prettier": "^3.9.6",
+    "sharp": "^0.35.3",
     "tailwindcss": "^4.3.3",
     "typedoc": "^0.28.20",
     "typescript": "^6.0.3",

@@ -7,6 +7,7 @@ const HomePage = lazy(() => import('./pages/HomePage'))
 const AnalyzePage = lazy(() => import('./pages/AnalyzePage'))
 const HistoryPage = lazy(() => import('./pages/HistoryPage'))
 const DashboardPage = lazy(() => import('./pages/DashboardPage'))
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'))
 
 export const PageLoader = () => (
   <div className="flex items-center justify-center min-h-[50vh]">
@@ -25,6 +26,7 @@ export const AppShell = () => (
             <Route path="/analyze" element={<AnalyzePage />} />
             <Route path="/history" element={<HistoryPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>
