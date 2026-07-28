@@ -16,6 +16,7 @@ An AI-powered triage tool that classifies incoming customer support messages, as
 - **Backend**: Vercel serverless function (`api/categorize.ts`)
 - **AI**: Groq API (Llama 3.3 70B)
 - **Deployment**: Vercel
+- **Observability**: Rollbar (error tracking, backend + frontend); structured JSON logging via `console` for anything Rollbar doesn't need to page on
 - **Testing**: Vitest + React Testing Library (unit/component, 100% coverage), Playwright + axe-core (E2E + accessibility)
 - **Documentation**: TypeDoc (JSDoc comments → static HTML in `docs/api`)
 
@@ -41,6 +42,8 @@ Create `.env.local` in the project root:
 ```env
 GROQ_API_KEY=gsk_your-actual-key-here
 ```
+
+(Rollbar error reporting — `ROLLBAR_SERVER_ACCESS_TOKEN` / `VITE_ROLLBAR_CLIENT_TOKEN` — is configured as Production-only env vars in Vercel, not `.env.local`. Locally and in CI those tokens are unset, so `logEvent`/`reportError` no-op and nothing is sent to Rollbar; no local setup needed.)
 
 Run the full stack (frontend + the `/api/categorize` serverless function):
 
@@ -162,7 +165,7 @@ This pass focused on the biggest remaining trust gap — a silent AI failure mod
 
 **Problem:** Relay AI's entire value proposition is AI-driven triage, but the app had no way to tell whether a result came from the real LLM or the keyword-based mock fallback. A bad/expired API key, rate limit, or network blip would silently degrade every subsequent triage to a much dumber heuristic, with support staff none the wiser.
 
-**Fix:** `categorizeMessage` now returns a `source: 'llm' | 'mock'` field plus a short `mockReason` (Missing/Invalid API key, Rate limit exceeded, Network error, AI service error, Invalid response format). The Analyze page shows a green "✓ AI-analyzed" or amber "⚠ Fallback Mode (reason)" banner on every result; History flags fallback-sourced entries with a badge; Dashboard surfaces a count of how many triages ran in fallback mode.
+**Fix:** `categorizeMessage` now returns a `source: 'llm' | 'mock'` field plus a short `mockReason` (Missing/Invalid API key, Rate limit exceeded, Network error, AI service error, Invalid response format). The Analyze page shows a green "✓ AI-analyzed" or amber "⚠ Fallback Mode (reason)" banner on every result; History flags fallback-sourced entries with a badge; Dashboard surfaces a count of how many triages ran in fallback mode. `api/categorize.ts` also distinguishes this at the HTTP layer: a real LLM result returns `200`, while a provider failure returns `502` with the same mock body — so uptime monitoring can see AI-provider outages without parsing the response.
 
 A related bug found while building this: the Groq client was constructed at module scope, so a missing API key crashed the app on load instead of falling back gracefully — fixed by lazily constructing the client inside the try block.
 
@@ -190,7 +193,7 @@ A related bug found while building this: the Groq client was constructed at modu
 
 **Problem:** Groq's JSON mode plus Zod validation already guarantee a well-typed response most of the time, but a single malformed or unparseable completion dropped straight to the local mock — no second attempt at the real model first. Separately, `SYSTEM_PROMPT` had no defense against a customer message trying to smuggle instructions to the classifier, and its example JSON asked for `category`/`urgency` before `reasoning`, letting the model commit to an answer before explaining it.
 
-**Fix:** `api/categorize.ts` now retries the Groq call once (with a corrective system message) when the response fails to parse or validate, before falling back to the mock; Groq API-level failures (auth, rate limit, network, missing key) still fall back immediately, unretried. `SYSTEM_PROMPT` (`shared/categorization.ts`) now instructs the model to treat the customer message strictly as data, lists `reasoning` first in the required JSON shape, and adds guidance for messages that plausibly span two categories (e.g. a bug-driven cancellation).
+**Fix:** `api/categorize.ts` now retries the Groq call once (with a corrective system message) when the response fails to parse or validate, before falling back to the mock; Groq API-level failures (auth, rate limit, network, missing key) still fall back immediately at the app level, unretried — though the Groq SDK client (configured with an explicit `timeout`/`maxRetries`) already retries transient network/429/5xx errors internally before the app ever sees them. `SYSTEM_PROMPT` (`shared/categorization.ts`) now instructs the model to treat the customer message strictly as data, lists `reasoning` first in the required JSON shape, and adds guidance for messages that plausibly span two categories (e.g. a bug-driven cancellation).
 
 ### 7. Other polish
 
