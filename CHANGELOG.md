@@ -4,6 +4,18 @@ All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). This project does not follow semantic version tags (it's a continuously deployed single application, not a versioned package) — entries are grouped by work session instead.
 
+## [1.3.0](https://github.com/hirekarl/l2assessment/compare/v1.2.0...v1.3.0) (2026-07-28)
+
+
+### Features
+
+* **seo:** comprehensive SEO pass, social cards, and AI-crawler visibility ([#13](https://github.com/hirekarl/l2assessment/issues/13)) ([05b43c3](https://github.com/hirekarl/l2assessment/commit/05b43c3a196ee064aedeaaf905aacf616cc31bd6))
+
+
+### Bug Fixes
+
+* **seo:** tighten title and description lengths for SERP/social previews ([#15](https://github.com/hirekarl/l2assessment/issues/15)) ([e7c61e9](https://github.com/hirekarl/l2assessment/commit/e7c61e99ff528851d1e07f75a8402f9db4fc15e6))
+
 ## [1.2.0](https://github.com/hirekarl/l2assessment/compare/v1.1.0...v1.2.0) (2026-07-27)
 
 
