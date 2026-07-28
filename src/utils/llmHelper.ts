@@ -1,10 +1,14 @@
 import { getMockCategorization } from '../../shared/categorization'
+import { logEvent, reportError } from './observability'
 import type { TriageResult } from '../types/triage'
 
 /**
  * Categorizes a customer message via the /api/categorize serverless function,
- * which holds the Groq API key server-side. Falls back to local keyword-based
- * mock categorization if the backend itself is unreachable.
+ * which holds the Groq API key server-side. The backend returns 502 (with a
+ * valid mock body + specific mockReason) when the AI provider itself fails,
+ * so that response is read as-is rather than discarded. Falls back to local
+ * keyword-based mock categorization only when the backend is unreachable or
+ * returns something unexpected.
  * @param message - The raw customer message text.
  * @returns Categorization result with source transparency metadata.
  */
@@ -16,14 +20,18 @@ export async function categorizeMessage(message: string): Promise<TriageResult> 
       body: JSON.stringify({ message }),
     })
 
-    if (!response.ok) {
-      throw new Error(`Backend returned ${response.status}`)
+    if (response.ok || response.status === 502) {
+      return (await response.json()) as TriageResult
     }
 
-    return (await response.json()) as TriageResult
+    throw new Error(`Backend returned ${response.status}`)
   } catch (error) {
     const mockReason = error instanceof TypeError ? 'Network error' : 'Backend unavailable'
-    console.warn(`Categorize API unreachable (${mockReason}), using local mock:`, error)
+    logEvent('warn', 'categorize_fetch_failed', {
+      mockReason,
+      message: error instanceof Error ? error.message : String(error),
+    })
+    reportError(error, { mockReason })
     return { ...getMockCategorization(message), source: 'mock', mockReason }
   }
 }

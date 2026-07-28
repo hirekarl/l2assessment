@@ -5,9 +5,23 @@ import {
   CategorizationResultSchema,
   getMockCategorization,
 } from '../shared/categorization'
+import { logEvent, reportError } from './_lib/observability'
 import type { CategorizationResult, MockReason } from '../src/types/triage'
 
 const MAX_ATTEMPTS = 2
+
+/** Request timeout for a single Groq call, tuned to stay well under the Hobby plan's 10s function cap. */
+const GROQ_TIMEOUT_MS = 3000
+
+/** SDK-level retries for a single Groq call (transient network/429/5xx errors). */
+const GROQ_MAX_RETRIES = 1
+
+/** Mock reasons severe enough to warrant error-level reporting rather than a tracked warning. */
+const ERROR_LEVEL_REASONS = new Set<MockReason>([
+  'Missing API key',
+  'Invalid API key',
+  'Unknown error',
+])
 
 /** Instruction appended on a retry after the previous Groq response failed to parse/validate. */
 const RETRY_NOTE =
@@ -25,7 +39,7 @@ function getGroqClient(): Groq {
     throw new MissingApiKeyError('GROQ_API_KEY is not set')
   }
   if (!groqClient) {
-    groqClient = new Groq({ apiKey })
+    groqClient = new Groq({ apiKey, timeout: GROQ_TIMEOUT_MS, maxRetries: GROQ_MAX_RETRIES })
   }
   return groqClient
 }
@@ -154,7 +168,20 @@ export default async function handler(req: RequestLike, res: ResponseLike): Prom
     })
   } catch (error) {
     const mockReason = classifyMockReason(error)
-    console.warn(`Groq API failed (${mockReason}), using mock response:`, error)
-    res.status(200).json({ ...getMockCategorization(message), source: 'mock', mockReason })
+    const level = ERROR_LEVEL_REASONS.has(mockReason) ? 'error' : 'warn'
+    logEvent(level, 'groq_fallback', {
+      mockReason,
+      message: error instanceof Error ? error.message : String(error),
+    })
+    reportError(error, { route: 'categorize', mockReason })
+    try {
+      res.status(502).json({ ...getMockCategorization(message), source: 'mock', mockReason })
+    } catch (fallbackError) {
+      logEvent('error', 'fallback_failure', {
+        message: fallbackError instanceof Error ? fallbackError.message : String(fallbackError),
+      })
+      reportError(fallbackError, { route: 'categorize', stage: 'mock-fallback' })
+      res.status(500).json({ error: 'Internal server error' })
+    }
   }
 }
