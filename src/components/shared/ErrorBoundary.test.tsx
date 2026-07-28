@@ -2,6 +2,11 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { ErrorBoundary } from './ErrorBoundary'
 
+const reportErrorMock = vi.fn()
+vi.mock('../../utils/observability', () => ({
+  reportError: (...args: unknown[]) => reportErrorMock(...args),
+}))
+
 const ProblemChild = ({ shouldThrow }: { shouldThrow: boolean }) => {
   if (shouldThrow) {
     throw new Error('Test error')
@@ -14,6 +19,7 @@ describe('ErrorBoundary', () => {
 
   beforeEach(() => {
     consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    reportErrorMock.mockClear()
   })
 
   afterEach(() => {
@@ -40,6 +46,10 @@ describe('ErrorBoundary', () => {
     expect(screen.getByRole('alert')).toBeInTheDocument()
     expect(screen.getByText('Something went wrong')).toBeInTheDocument()
     expect(consoleErrorSpy).toHaveBeenCalled()
+    expect(reportErrorMock).toHaveBeenCalledWith(
+      expect.any(Error),
+      expect.objectContaining({ componentStack: expect.any(String) })
+    )
   })
 
   it('renders custom fallback when provided', () => {

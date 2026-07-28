@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { categorizeMessage } from '../utils/llmHelper'
 import { getRecommendedAction, shouldEscalate } from '../utils/templates'
 import { useTriageHistory } from './useTriageHistory'
+import { logEvent, reportError } from '../utils/observability'
 import type { Category, MockReason, SourceType, Urgency } from '../types/triage'
 
 export interface AnalysisResult {
@@ -19,6 +20,7 @@ export interface AnalysisResult {
 export interface UseAnalyzeMessageReturn {
   results: AnalysisResult | null
   isLoading: boolean
+  persistFailed: boolean
   analyze: (message: string) => Promise<void>
   reset: () => void
 }
@@ -32,11 +34,13 @@ export interface UseAnalyzeMessageReturn {
 export function useAnalyzeMessage(): UseAnalyzeMessageReturn {
   const [results, setResults] = useState<AnalysisResult | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [persistFailed, setPersistFailed] = useState(false)
   const { appendEntry } = useTriageHistory()
 
   const analyze = async (message: string) => {
     setIsLoading(true)
     setResults(null)
+    setPersistFailed(false)
 
     try {
       const { category, urgency, reasoning, source, mockReason } = await categorizeMessage(message)
@@ -56,16 +60,31 @@ export function useAnalyzeMessage(): UseAnalyzeMessageReturn {
       }
 
       setResults(analysisResult)
-      appendEntry(analysisResult)
+
+      try {
+        appendEntry(analysisResult)
+      } catch (persistError) {
+        setPersistFailed(true)
+        logEvent('warn', 'triage_history_persist_failed', {
+          message: persistError instanceof Error ? persistError.message : String(persistError),
+        })
+        reportError(persistError, { stage: 'appendEntry' })
+      }
     } catch (error) {
-      console.error('Error analyzing message:', error)
+      logEvent('error', 'analyze_message_failed', {
+        message: error instanceof Error ? error.message : String(error),
+      })
+      reportError(error, { stage: 'analyze' })
       throw error
     } finally {
       setIsLoading(false)
     }
   }
 
-  const reset = () => setResults(null)
+  const reset = () => {
+    setResults(null)
+    setPersistFailed(false)
+  }
 
-  return { results, isLoading, analyze, reset }
+  return { results, isLoading, persistFailed, analyze, reset }
 }

@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react'
+import { reportError } from '../../utils/observability'
 
 export interface ErrorBoundaryProps {
   children: ReactNode
@@ -26,6 +27,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
   public override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     console.error('Uncaught error caught by ErrorBoundary:', error, errorInfo)
+    reportError(error, { componentStack: errorInfo.componentStack })
   }
 
   public handleReset = (): void => {
