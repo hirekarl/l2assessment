@@ -4,38 +4,47 @@ All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). This project does not follow semantic version tags (it's a continuously deployed single application, not a versioned package) — entries are grouped by work session instead.
 
-## [1.3.0](https://github.com/hirekarl/l2assessment/compare/v1.2.0...v1.3.0) (2026-07-28)
+## [1.4.0](https://github.com/hirekarl/l2assessment/compare/v1.3.0...v1.4.0) (2026-07-28)
 
+Added manually — release-please couldn't parse [#16](https://github.com/hirekarl/l2assessment/pull/16)'s squash-merge commit (its header wasn't Conventional Commits-formatted, so the tool skipped it entirely and this work is otherwise absent from automated release history).
 
 ### Features
 
-* **seo:** comprehensive SEO pass, social cards, and AI-crawler visibility ([#13](https://github.com/hirekarl/l2assessment/issues/13)) ([05b43c3](https://github.com/hirekarl/l2assessment/commit/05b43c3a196ee064aedeaaf905aacf616cc31bd6))
-
+- **observability:** add structured logging and Rollbar error reporting wrappers ([#16](https://github.com/hirekarl/l2assessment/pull/16)) ([a700500](https://github.com/hirekarl/l2assessment/commit/a7005008fd22a0f87611c81352e93dc8c0011e79))
+- **api:** distinguish AI-provider failures via HTTP status, add structured logging ([#16](https://github.com/hirekarl/l2assessment/pull/16)) ([a700500](https://github.com/hirekarl/l2assessment/commit/a7005008fd22a0f87611c81352e93dc8c0011e79))
+- **ui:** replace alert()-based errors with InlineAlert, fix a persist-failure UX bug ([#16](https://github.com/hirekarl/l2assessment/pull/16)) ([a700500](https://github.com/hirekarl/l2assessment/commit/a7005008fd22a0f87611c81352e93dc8c0011e79))
 
 ### Bug Fixes
 
-* **seo:** tighten title and description lengths for SERP/social previews ([#15](https://github.com/hirekarl/l2assessment/issues/15)) ([e7c61e9](https://github.com/hirekarl/l2assessment/commit/e7c61e99ff528851d1e07f75a8402f9db4fc15e6))
+- **llmHelper:** read the backend's 502 mock body instead of discarding it ([#16](https://github.com/hirekarl/l2assessment/pull/16)) ([a700500](https://github.com/hirekarl/l2assessment/commit/a7005008fd22a0f87611c81352e93dc8c0011e79))
+
+## [1.3.0](https://github.com/hirekarl/l2assessment/compare/v1.2.0...v1.3.0) (2026-07-28)
+
+### Features
+
+- **seo:** comprehensive SEO pass, social cards, and AI-crawler visibility ([#13](https://github.com/hirekarl/l2assessment/issues/13)) ([05b43c3](https://github.com/hirekarl/l2assessment/commit/05b43c3a196ee064aedeaaf905aacf616cc31bd6))
+
+### Bug Fixes
+
+- **seo:** tighten title and description lengths for SERP/social previews ([#15](https://github.com/hirekarl/l2assessment/issues/15)) ([e7c61e9](https://github.com/hirekarl/l2assessment/commit/e7c61e99ff528851d1e07f75a8402f9db4fc15e6))
 
 ## [1.2.0](https://github.com/hirekarl/l2assessment/compare/v1.1.0...v1.2.0) (2026-07-27)
 
-
 ### Features
 
-* **api:** retry once on malformed Groq responses, refine classification prompt ([509b6a6](https://github.com/hirekarl/l2assessment/commit/509b6a689738ec5a9fd2d94ccfd7c77b92e83a11))
-* **api:** retry once on malformed Groq responses, refine classification prompt ([c03a2ce](https://github.com/hirekarl/l2assessment/commit/c03a2cee8b23c3a148f2acadbc576418e2734bd1))
-
+- **api:** retry once on malformed Groq responses, refine classification prompt ([509b6a6](https://github.com/hirekarl/l2assessment/commit/509b6a689738ec5a9fd2d94ccfd7c77b92e83a11))
+- **api:** retry once on malformed Groq responses, refine classification prompt ([c03a2ce](https://github.com/hirekarl/l2assessment/commit/c03a2cee8b23c3a148f2acadbc576418e2734bd1))
 
 ### Bug Fixes
 
-* **api:** harden prompt injection defense with explicit message delimiters ([7053a9a](https://github.com/hirekarl/l2assessment/commit/7053a9a681edab303b7ed74a8ad43780e3c1bf61))
-* **api:** report "Invalid response format" for TypeError/ZodError too ([711a632](https://github.com/hirekarl/l2assessment/commit/711a6321867a8642070a4bfae1b46d752cca579f))
+- **api:** harden prompt injection defense with explicit message delimiters ([7053a9a](https://github.com/hirekarl/l2assessment/commit/7053a9a681edab303b7ed74a8ad43780e3c1bf61))
+- **api:** report "Invalid response format" for TypeError/ZodError too ([711a632](https://github.com/hirekarl/l2assessment/commit/711a6321867a8642070a4bfae1b46d752cca579f))
 
 ## [1.1.0](https://github.com/hirekarl/l2assessment/compare/v1.0.0...v1.1.0) (2026-07-27)
 
-
 ### Features
 
-* **ci:** gate Vercel production deploy on CI + restrict to main pushes ([#8](https://github.com/hirekarl/l2assessment/issues/8)) ([58fbc47](https://github.com/hirekarl/l2assessment/commit/58fbc47267a38ae83a235c156e14b9362dd4c0ae))
+- **ci:** gate Vercel production deploy on CI + restrict to main pushes ([#8](https://github.com/hirekarl/l2assessment/issues/8)) ([58fbc47](https://github.com/hirekarl/l2assessment/commit/58fbc47267a38ae83a235c156e14b9362dd4c0ae))
 
 ## 1.0.0 (2026-07-27)
 
